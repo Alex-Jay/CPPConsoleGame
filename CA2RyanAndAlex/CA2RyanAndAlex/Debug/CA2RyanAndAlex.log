@@ -1,0 +1,6 @@
+﻿  Monster.cpp
+c:\users\ryan\documents\visual studio 2017\projects\ca2ryanandalex\ca2ryanandalex\monster.cpp(26): warning C4018: '<': signed/unsigned mismatch
+  CA2RyanAndAlex.cpp
+  Generating Code...
+  CA2RyanAndAlex.vcxproj -> C:\Users\Ryan\Documents\Visual Studio 2017\Projects\CA2RyanAndAlex\Debug\CA2RyanAndAlex.exe
+  CA2RyanAndAlex.vcxproj -> C:\Users\Ryan\Documents\Visual Studio 2017\Projects\CA2RyanAndAlex\Debug\CA2RyanAndAlex.pdb (Partial PDB)
