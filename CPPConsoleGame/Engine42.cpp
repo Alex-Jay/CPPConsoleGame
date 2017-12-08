@@ -37,6 +37,7 @@ void Engine42::InitializeMap(const std::string FILENAME)
 void Engine42::Update()
 {
 	ListenKeyInput();
+	DebugPosition();
 }
 
 void Engine42::Run()
@@ -114,9 +115,8 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 
 void Engine42::DebugPosition()
 {
-	GotoXY(100, 0);
+	GotoXY(0, 27);
 	std::cout << "X: " << PlayerPosition.first << "\tY: " << PlayerPosition.second;
-	Sleep(20);
 }
 
 void Engine42::ListenKeyInput()
