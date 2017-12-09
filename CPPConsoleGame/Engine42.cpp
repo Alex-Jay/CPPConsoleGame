@@ -45,9 +45,6 @@ void Engine42::Run()
 	PlayerPosition.first = 7; // X Position
 	PlayerPosition.second = 2; // Y Position
 
-	// Set Console Size
-	SetConsoleSize(400, 700);
-
 	InitializeMap("Map2.txt");
 
 	if (MapLoaded)
@@ -56,8 +53,14 @@ void Engine42::Run()
 	while (IsRunning)
 	{
 		Update();
+		Draw();
 		Sleep(50);
 	}
+}
+
+void Engine42::Draw()
+{
+	GotoXY(PlayerPosition.first, PlayerPosition.second, PlayerIcon);
 }
 
 void Engine42::DrawMap(const std::string FILENAME)
@@ -85,38 +88,59 @@ void Engine42::DrawMap(const std::string FILENAME)
 
 void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 {
+
+	int X = PlayerPosition.first;
+	int Y = PlayerPosition.second;
 	switch (DIRECTION)
 	{
 	case RIGHT:
-		GotoXY(PlayerPosition.first++, PlayerPosition.second, PlayerIcon);
-		GotoXY(PlayerPosition.first - 2, PlayerPosition.second, FloorTexture);
-		Sleep(MovementSpeed);
+		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
+
+		if (Map.at(Y).at(X+2) != WallIcon)
+		{
+			PlayerPosition.first++;
+		}
 		break;
 
 	case LEFT:
-		GotoXY(PlayerPosition.first--, PlayerPosition.second, PlayerIcon);
-		GotoXY(PlayerPosition.first + 2, PlayerPosition.second, FloorTexture);
-		Sleep(MovementSpeed);
+		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
+
+		if (Map.at(Y).at(X-2) != WallIcon)
+		{
+			PlayerPosition.first--;
+		}
 		break;
 
 	case UP:
-		GotoXY(PlayerPosition.first, PlayerPosition.second--, PlayerIcon);
-		GotoXY(PlayerPosition.first, PlayerPosition.second + 2, FloorTexture);
-		Sleep(MovementSpeed);
+		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
+
+		if (Map.at(Y-2).at(X) != WallIcon)
+		{
+			PlayerPosition.second--;
+		}
 		break;
 
 	case DOWN:
-		GotoXY(PlayerPosition.first, PlayerPosition.second++, PlayerIcon);
-		GotoXY(PlayerPosition.first, PlayerPosition.second - 2, FloorTexture);
-		Sleep(MovementSpeed);
+		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
+		if (Map.at(Y+2).at(X) != WallIcon)
+		{
+			PlayerPosition.second++;
+		}
 		break;
 	}
 }
 
 void Engine42::DebugPosition()
 {
+
+	int X = PlayerPosition.first;
+	int Y = PlayerPosition.second;
+
 	GotoXY(0, 27);
 	std::cout << "X: " << PlayerPosition.first << "\tY: " << PlayerPosition.second;
+
+	GotoXY(0, 28);
+	std::cout << "Next Right Char: " << Map.at(Y).at(X + 2);
 }
 
 void Engine42::ListenKeyInput()

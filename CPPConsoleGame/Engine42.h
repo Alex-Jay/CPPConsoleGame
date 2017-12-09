@@ -14,6 +14,7 @@ private:
 	int m_id;
 public:
 	static int IDCounter;
+	const char WallIcon = 'X';
 	bool MapLoaded;
 	bool IsRunning;
 	HANDLE console;
@@ -31,6 +32,7 @@ public:
 	void SetConsoleSize(int, int);
 	void Update();
 	void Run();
+	void Draw();
 	void DrawMap(const std::string);
 	void MovePlayer(enum Direction, int MovementSpeed = 80);
 	void DebugPosition();
