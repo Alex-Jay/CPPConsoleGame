@@ -8,6 +8,8 @@
 
 int Engine42::IDCounter = 0;
 
+const enum GameObjects { PLAYER = 'P', NPC = 'N', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*' };
+
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
 	// Initialize Handle
@@ -28,16 +30,16 @@ void Engine42::SetConsoleSize(int height, int width)
 void Engine42::InitializeMap(const std::string FILENAME)
 {
 	// Set Console Size
-	SetConsoleSize(400, 700);
+	SetConsoleSize(500, 700);
 
-	// Draw Map
+	//Draw Map Layout
 	DrawMap(FILENAME);
 }
 
 void Engine42::Update()
 {
 	ListenKeyInput();
-	DebugPosition();
+	//DebugPosition();
 }
 
 void Engine42::Run()
@@ -45,10 +47,13 @@ void Engine42::Run()
 	PlayerPosition.first = 7; // X Position
 	PlayerPosition.second = 2; // Y Position
 
-	InitializeMap("Map2.txt");
+	InitializeMap("Map3.txt");
+
 
 	if (MapLoaded)
+	{
 		IsRunning = true;
+	}
 
 	while (IsRunning)
 	{
@@ -193,11 +198,12 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 	{
 		Map.clear(); //Clear Map Incase New Map Is Being Loaded
 
+		//Initialise X Position of Map
+		std::vector<char> XPos;
+
 		while (file.good()) // Loop While File Is In A Good State
 		{
 			getline(file, line);
-
-			std::vector<char> XPos;
 
 			if (!line.empty())
 			{
@@ -205,6 +211,22 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 				{
 					// Push Current Character into 'XPos' vector
 					XPos.push_back(c);
+
+					switch (c)
+					{
+					case PLAYER:
+						break;
+					case NPC:
+						break;
+					case MOB:
+						break;
+					case DOOR:
+						break;
+					case DROP:
+						break;
+					case COLLECTIBLE:
+						break;
+					}
 				}
 			}
 			// Push Vector of X-Positions and it's corresponding Character
