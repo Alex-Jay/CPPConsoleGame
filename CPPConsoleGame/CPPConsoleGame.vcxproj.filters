@@ -21,9 +21,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine42.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -32,19 +29,5 @@
     <ClCompile Include="CPPConsoleGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine42.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Map1.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="Map2.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="Map3.txt">
-      <Filter>Source Files</Filter>
-    </Text>
   </ItemGroup>
 </Project>
