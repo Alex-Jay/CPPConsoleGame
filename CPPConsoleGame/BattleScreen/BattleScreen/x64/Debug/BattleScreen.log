@@ -1,0 +1,8 @@
+﻿  stdafx.cpp
+  Weapon.cpp
+  BattleScreen.cpp
+f:\semester 5\c++ca2module\battlescreen\battlescreen\battlescreen.cpp(58): warning C4101: 'run': unreferenced local variable
+  BattleObject.cpp
+  Generating Code...
+  BattleScreen.vcxproj -> F:\Semester 5\C++CA2Module\BattleScreen\x64\Debug\BattleScreen.exe
+  BattleScreen.vcxproj -> F:\Semester 5\C++CA2Module\BattleScreen\x64\Debug\BattleScreen.pdb (Partial PDB)

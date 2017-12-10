@@ -1,0 +1,9 @@
+﻿  BattleMenu.cpp
+e:\battlescreen\battlescreen\battlemenu.cpp(5): error C3646: 'm_player': unknown override specifier
+e:\battlescreen\battlescreen\battlemenu.cpp(5): error C2059: syntax error: '('
+e:\battlescreen\battlescreen\battlemenu.cpp(6): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+e:\battlescreen\battlescreen\battlemenu.cpp(7): error C2059: syntax error: ';'
+e:\battlescreen\battlescreen\battlemenu.cpp(8): error C2059: syntax error: '}'
+e:\battlescreen\battlescreen\battlemenu.cpp(8): error C2143: syntax error: missing ';' before '}'
+e:\battlescreen\battlescreen\battlemenu.cpp(12): error C2143: syntax error: missing ';' before '{'
+e:\battlescreen\battlescreen\battlemenu.cpp(12): error C2447: '{': missing function header (old-style formal list?)
