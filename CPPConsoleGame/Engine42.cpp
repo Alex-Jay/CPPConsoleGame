@@ -41,13 +41,31 @@ void Engine42::InitializeMap(const std::string FILENAME)
 
 void Engine42::Update()
 {
+	// Open Menu On First Boot
 	if (FirstCycle)
 	{
 		OpenMenu();
 		FirstCycle = false;
-	} // Open Menu On First Boot
+	}
+
+	// Remove Entities from Map array for Redraw
+	//switch (Map.at(PlayerPosition.first).at(PlayerPosition.second))
+	//{
+	//	case MOB:
+	//		// Map.at(PlayerPosition.first).at(PlayerPosition.second) = ' ';
+	//		break;
+	//	case DROP:
+	//		// Map.at(PlayerPosition.first).at(PlayerPosition.second) = ' ';
+	//		break;
+	//	case COLLECTIBLE:
+	//		// Map.at(PlayerPosition.first).at(PlayerPosition.second) = ' ';
+	//		break;
+	//}
+
+	//Listen To Input
 	ListenKeyInput();
-	DebugPosition();
+
+	//DebugPosition();
 }
 
 void Engine42::Run()
@@ -103,7 +121,15 @@ void Engine42::DrawMap(const std::string FILENAME)
 
 void Engine42::RedrawMap()
 {
-	DrawMap(m_MapName);
+	GotoXY(0, 0); // Reset cursor before redrawing the map
+	for (auto& YPos : Map)
+	{
+		for (auto& XPos: YPos)
+		{
+			std::cout << XPos;
+		}
+		std::cout << std::endl;
+	}
 }
 
 void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
@@ -209,8 +235,8 @@ void Engine42::OpenMenu()
 
 void Engine42::DebugPosition()
 {
-	int X = PlayerPosition.first;
-	int Y = PlayerPosition.second;
+	GotoXY(0, 25);
+	std::cout << "Health: " << "\tArmor: " << "\tQuest Name: ";
 }
 
 void Engine42::ListenKeyInput()
@@ -284,6 +310,7 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 						case PLAYER:
 							PlayerPosition.first = X;
 							PlayerPosition.second = Y;
+							c = ' ';
 
 							// Instansiate Monster Object with X & Y Positions
 							break;
