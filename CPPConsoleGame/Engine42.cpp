@@ -5,10 +5,10 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
+#include "Menu.h"
 
 int Engine42::IDCounter = 0;
-
-const enum GameObjects { PLAYER = 'P', NPC = 'N', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*' };
+const enum GameObjects { PLAYER = 'P', NPC = 'N', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
 
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
@@ -44,8 +44,9 @@ void Engine42::Update()
 
 void Engine42::Run()
 {
-	PlayerPosition.first = 7; // X Position
-	PlayerPosition.second = 2; // Y Position
+	//Pre-Initialise Spawn Location if Not Found
+	PlayerPosition.first = 4; // X Position
+	PlayerPosition.second = 6; // Y Position
 
 	InitializeMap("Map3.txt");
 
@@ -65,12 +66,14 @@ void Engine42::Run()
 
 void Engine42::Draw()
 {
-	GotoXY(PlayerPosition.first, PlayerPosition.second, PlayerIcon);
+	GotoXY(PlayerPosition.first, PlayerPosition.second, "P"); //Stringify Icon
 }
 
 void Engine42::DrawMap(const std::string FILENAME)
 {
 	LoadMapFile(FILENAME);
+
+	m_MapName = FILENAME;
 
 	if (MapLoaded)
 	{
@@ -91,6 +94,11 @@ void Engine42::DrawMap(const std::string FILENAME)
 	}
 }
 
+void Engine42::RedrawMap()
+{
+	DrawMap(m_MapName);
+}
+
 void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 {
 
@@ -99,35 +107,35 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	switch (DIRECTION)
 	{
 	case RIGHT:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
+		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
 
-		if (Map.at(Y).at(X+2) != WallIcon)
+		if (Map.at(Y).at(X+2) != WALL)
 		{
 			PlayerPosition.first++;
 		}
 		break;
 
 	case LEFT:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
+		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
 
-		if (Map.at(Y).at(X-2) != WallIcon)
+		if (Map.at(Y).at(X-2) != WALL)
 		{
 			PlayerPosition.first--;
 		}
 		break;
 
 	case UP:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
+		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
 
-		if (Map.at(Y-2).at(X) != WallIcon)
+		if (Map.at(Y-2).at(X) != WALL)
 		{
 			PlayerPosition.second--;
 		}
 		break;
 
 	case DOWN:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, FloorTexture);
-		if (Map.at(Y+2).at(X) != WallIcon)
+		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
+		if (Map.at(Y+2).at(X) != WALL)
 		{
 			PlayerPosition.second++;
 		}
@@ -191,6 +199,7 @@ void Engine42::GotoXY(int X, int Y, std::string text)
 
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
+	int X = 0, Y = 0;
 	std::ifstream file(FILENAME);
 	std::string line;
 
@@ -205,34 +214,45 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 		{
 			getline(file, line);
 
+			X = 0; // Reset Value on New Line
+
 			if (!line.empty())
 			{
 				for (char c : line)
 				{
+					if (c != FLOOR || c != NULL)
+					{
+						switch (c)
+						{
+						case PLAYER:
+							PlayerPosition.first = X;
+							PlayerPosition.second = Y;
+							break;
+						case NPC:
+							break;
+						case MOB:
+							break;
+						case DOOR:
+							break;
+						case DROP:
+							break;
+						case COLLECTIBLE:
+							break;
+						}
+					}
+
+					X++; // Increment X Position
+
 					// Push Current Character into 'XPos' vector
 					XPos.push_back(c);
-
-					switch (c)
-					{
-					case PLAYER:
-						break;
-					case NPC:
-						break;
-					case MOB:
-						break;
-					case DOOR:
-						break;
-					case DROP:
-						break;
-					case COLLECTIBLE:
-						break;
-					}
 				}
 			}
 			// Push Vector of X-Positions and it's corresponding Character
 			Map.push_back(XPos);
 
 			XPos.clear(); // Clear X-Position Array for Next Line
+
+			Y++; // Increment Y Position
 		}
 
 		file.close(); // Close File

@@ -12,9 +12,9 @@ class Engine42
 {
 private:
 	int m_id;
+	std::string m_MapName;
 public:
 	static int IDCounter;
-	const char WallIcon = 'X';
 	bool MapLoaded;
 	bool IsRunning;
 	HANDLE console;
@@ -23,17 +23,17 @@ public:
 	MapArray Map; // Using Outer Vectors index as Y-Position and using Inner Vectors index of as X-Poition, Inner Vector Contents Contain Character at Position.
 
 	std::pair<int, int> PlayerPosition;
-	const std::string PlayerIcon = "P";
-	const std::string FloorTexture = " ";
 
 	Engine42();
-	int GetID() { return m_id; };
+	int GetID() { return m_id; }
 	void InitializeMap(const std::string);
 	void SetConsoleSize(int, int);
 	void Update();
 	void Run();
-	void Draw();
+	std::string GetMapName() { return m_MapName; }
+	virtual void Draw();
 	void DrawMap(const std::string);
+	void RedrawMap();
 	void MovePlayer(enum Direction, int MovementSpeed = 80);
 	void DebugPosition();
 	void ListenKeyInput();
