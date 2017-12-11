@@ -109,7 +109,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case RIGHT:
 		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
 
-		if (Map.at(Y).at(X+2) != WALL)
+		if (Map.at(Y).at(X+1) != WALL)
 		{
 			PlayerPosition.first++;
 		}
@@ -118,7 +118,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case LEFT:
 		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
 
-		if (Map.at(Y).at(X-2) != WALL)
+		if (Map.at(Y).at(X-1) != WALL)
 		{
 			PlayerPosition.first--;
 		}
@@ -127,7 +127,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case UP:
 		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
 
-		if (Map.at(Y-2).at(X) != WALL)
+		if (Map.at(Y-1).at(X) != WALL)
 		{
 			PlayerPosition.second--;
 		}
@@ -135,7 +135,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 
 	case DOWN:
 		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
-		if (Map.at(Y+2).at(X) != WALL)
+		if (Map.at(Y+1).at(X) != WALL)
 		{
 			PlayerPosition.second++;
 		}
@@ -227,16 +227,23 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 						case PLAYER:
 							PlayerPosition.first = X;
 							PlayerPosition.second = Y;
+
+							// Instansiate Monster Object with X & Y Positions
 							break;
 						case NPC:
+							// Instansiate NPC Object with X & Y Positions
 							break;
 						case MOB:
+							// Instansiate Monster Object with X & Y Positions
 							break;
 						case DOOR:
+							// Do Door Logic
 							break;
 						case DROP:
+							// Do Drop Object - Randomize Drop?
 							break;
 						case COLLECTIBLE:
+							// Do Collectible Logic
 							break;
 						}
 					}
