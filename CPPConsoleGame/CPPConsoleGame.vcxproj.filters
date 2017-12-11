@@ -27,13 +27,31 @@
     <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MOB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Monster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\NPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Weapon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,13 +68,34 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MOB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\NPC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Weapon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Monster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
