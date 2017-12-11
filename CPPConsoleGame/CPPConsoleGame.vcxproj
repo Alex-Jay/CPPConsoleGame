@@ -143,40 +143,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BattleEvent.h" />
+    <ClInclude Include="BattleMenu.h" />
+    <ClInclude Include="BattleObject.h" />
     <ClInclude Include="Engine42.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleEvent.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleMenu.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleObject.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\GameObject.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Monster.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\NPC.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Player.h" />
-    <ClInclude Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Weapon.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="NPC.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BattleEvent.cpp" />
+    <ClCompile Include="BattleMenu.cpp" />
+    <ClCompile Include="BattleObject.cpp" />
     <ClCompile Include="CPPConsoleGame.cpp" />
     <ClCompile Include="Engine42.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleEvent.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleMenu.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleObject.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\BattleScreen.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\GameObject.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Monster.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\NPC.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Player.cpp" />
-    <ClCompile Include="F:\Semester 5\C++CA2Module\BattleScreen\BattleScreen\Weapon.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Map1.txt" />
