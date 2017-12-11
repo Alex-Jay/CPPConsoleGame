@@ -3,15 +3,24 @@
 
 
 
-BattleObject::BattleObject(int health, string name, int attack, int defence): m_id(1), m_health(health), m_name(name), m_attack(attack),  m_defence(defence), m_defend(false)
+BattleObject::BattleObject(int health, string name, int attack, int defence) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false)
 {
-	std::cout << "object has been created\n";
+	
+
+}
+BattleObject::BattleObject(int health, string name, int attack, int defence, Weapon weapon) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false), m_weapon(weapon)
+{
+
 }
 
 string BattleObject::getName()
 {
 	return m_name;
 
+}
+Weapon BattleObject::getWeapon()
+{
+	return m_weapon;
 }
 int BattleObject::getHealth()
 {
@@ -29,10 +38,14 @@ bool BattleObject::isDefend()
 {
 	return m_defend;
 }
-void BattleObject::decreaseHealth(int damage)
+void BattleObject::decreaseHealth(int damage) // set health
 {
 	cout << m_name << " has taken " << to_string(damage) << ", ";
 	m_health -= damage;
+	if (m_health < 1)
+	{
+		m_health = 0;
+	}
 	cout << m_name << " has " << to_string(m_health) << " remaining!\n";
 	checkIsDead();
 }
@@ -48,17 +61,16 @@ void BattleObject::gainHealth(int heal)
 {
 	m_health += heal;
 }
-
 void BattleObject::Attack(BattleObject& bo)
 {
-	int damage;
+	int currentAttack = m_attack + m_weapon.getAttack(), curentDefence = bo.getDefence() + bo.getWeapon().getDefence() ,damage;
 	if (bo.isDefend() == false)
 	{
-		damage = (2 *this->getAttack()) - bo.getDefence();
+		damage = (2 * currentAttack) - bo.getDefence();
 	}
 	else
 	{
-		damage = ((2 * this->getAttack()) - (bo.getDefence() * 3));
+		damage = ((2 * currentAttack) - (bo.getDefence() * 3));
 		bo.Defend();
 	}
 	if (damage < 1)
@@ -77,6 +89,14 @@ void BattleObject::Defend()
 	{
 		m_defend = true;
 	}
+}
+void BattleObject::setWeapon(Weapon n)
+{
+	m_weapon = n;
+}
+string BattleObject::toString()
+{
+	return  " HP: " + to_string(m_health) + " Name: "+ m_name + " Atk: " + to_string(m_attack) + " Def: " + to_string(m_defence) + "\n Weapon Stats: " + m_weapon.toString();
 }
 BattleObject::~BattleObject()
 {
