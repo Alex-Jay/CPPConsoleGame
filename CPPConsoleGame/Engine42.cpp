@@ -8,6 +8,9 @@
 #include "Menu.h"
 
 int Engine42::IDCounter = 0;
+const int CONSOLESIZE[] = { 500,700 };
+bool MenuTriggered = true;
+bool FirstCycle = true;
 const enum GameObjects { PLAYER = 'P', NPC = 'N', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
 
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
@@ -38,8 +41,13 @@ void Engine42::InitializeMap(const std::string FILENAME)
 
 void Engine42::Update()
 {
+	if (FirstCycle)
+	{
+		OpenMenu();
+		FirstCycle = false;
+	} // Open Menu On First Boot
 	ListenKeyInput();
-	//DebugPosition();
+	DebugPosition();
 }
 
 void Engine42::Run()
@@ -49,7 +57,6 @@ void Engine42::Run()
 	PlayerPosition.second = 6; // Y Position
 
 	InitializeMap("Map3.txt");
-
 
 	if (MapLoaded)
 	{
@@ -143,17 +150,67 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	}
 }
 
+void Engine42::OpenMenu()
+{
+	MenuTriggered = true;
+
+	GotoXY(27,27); std::cout << "->";
+
+	int Menu_Item = 0, CursorXPos = 27;
+
+	while (MenuTriggered)
+	{
+		GotoXY(30, 27);  std::cout << " Start Game";
+		GotoXY(30, 28);  std::cout << " Options";
+		GotoXY(30, 29);  std::cout << " Exit";
+
+		system("PAUSE>NUL");
+
+		if (GetAsyncKeyState(VK_DOWN) && CursorXPos < 29) //down button pressed
+		{
+			GotoXY(27, CursorXPos); std::cout << "  ";
+			CursorXPos++;
+			GotoXY(27, CursorXPos); std::cout << "->";
+			Menu_Item++;
+			continue;
+
+		}
+
+		if (GetAsyncKeyState(VK_UP) && CursorXPos > 27) //up button pressed
+		{
+			GotoXY(27, CursorXPos); std::cout << "  ";
+			CursorXPos--;
+			GotoXY(27, CursorXPos); std::cout << "->";
+			Menu_Item--;
+			continue;
+		}
+
+		if (GetAsyncKeyState(VK_RETURN)) { // Enter key pressed
+
+			switch (Menu_Item)
+			{
+				case 0:
+					// Clear Main Menu
+					GotoXY(0, 27);  std::cout << std::string(Map.at(0).size(), ' ');
+					GotoXY(0, 28);  std::cout << std::string(Map.at(0).size(), ' ');
+					GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
+					MenuTriggered = false;
+					break;
+				case 1:
+					break;
+				case 2:
+					MenuTriggered = false;
+					IsRunning = false;
+					break;
+			}
+		}
+	}
+}
+
 void Engine42::DebugPosition()
 {
-
 	int X = PlayerPosition.first;
 	int Y = PlayerPosition.second;
-
-	GotoXY(0, 27);
-	std::cout << "X: " << PlayerPosition.first << "\tY: " << PlayerPosition.second;
-
-	GotoXY(0, 28);
-	std::cout << "Next Right Char: " << Map.at(Y).at(X + 2);
 }
 
 void Engine42::ListenKeyInput()
@@ -176,7 +233,7 @@ void Engine42::ListenKeyInput()
 	}
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 	{
-		IsRunning = false;
+		OpenMenu();
 	}
 }
 

@@ -39,6 +39,7 @@ public:
 	void ListenKeyInput();
 	void GotoXY(int, int);
 	void GotoXY(int, int, std::string);
+	void OpenMenu();
 	void LoadMapFile(const std::string);
 };
 #endif
