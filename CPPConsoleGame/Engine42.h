@@ -38,11 +38,12 @@ public:
 	void RedrawMap();
 	void ClearScreen();
 	void MovePlayer(enum Direction, int MovementSpeed = 80);
-	void DebugPosition();
+	void Debug();
 	void ListenKeyInput();
 	void GotoXY(int, int);
 	void GotoXY(int, int, std::string);
 	void OpenMenu();
+	void ProcessCharacter(char, int, int);
 	void LoadMapFile(const std::string);
 	void LoadDrawMapFile(const std::string);
 };

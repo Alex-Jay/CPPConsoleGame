@@ -17,6 +17,8 @@
 // BUG LOCATION:
 // MovePlayer()
 
+bool ENABLE_DEBUGGER = false;
+
 int Engine42::IDCounter = 0;
 const int CONSOLE_SIZE[] = { 500, 625 };
 const int PLAYER_START_HEALTH = 100;
@@ -89,6 +91,7 @@ void Engine42::InitializeMap(const std::string FILENAME)
 	dialogue.push_back("Go on then, Go Explore!");
 }
 
+// Any Update Logic Here
 void Engine42::Update()
 {
 	// Open Menu On First Boot
@@ -101,9 +104,19 @@ void Engine42::Update()
 	//Listen To Input
 	ListenKeyInput();
 
-	DebugPosition();
+	// If Debugger is Active, Debug()
+	if (ENABLE_DEBUGGER)
+	{
+		Debug();
+	}
+	else
+	{
+		GotoXY(0, 25); cout << std::string(Map.at(0).size(), ' ');
+		GotoXY(0, 26); cout << std::string(Map.at(0).size(), ' ');
+	}
 }
 
+// Game Entry Point
 void Engine42::Run()
 {
 	// Pre-Initialise Spawn Location if Not Found
@@ -125,6 +138,7 @@ void Engine42::Run()
 	}
 }
 
+// Any Draw Calls Here
 void Engine42::Draw()
 {
 	//Draw Player Position
@@ -160,9 +174,9 @@ void Engine42::RedrawMap()
 
 	GotoXY(0, 0); // Reset cursor before redrawing the map
 
-	for (auto& YPos : Map)
+	for (auto& YPos : Map) // Loop Through all Y Positions
 	{
-		for (auto& XPos: YPos)
+		for (auto& XPos: YPos) // Loop Through all X Positions
 		{
 			std::cout << XPos;
 		}
@@ -231,11 +245,19 @@ void Engine42::OpenMenu()
 		// Controls
 		GotoXY(30, 27);  std::cout << " Start Game";
 		GotoXY(30, 28);  std::cout << " Controls";
-		GotoXY(30, 29);  std::cout << " Exit";
+		if (ENABLE_DEBUGGER)
+		{
+			GotoXY(30, 29);  std::cout << " Debug: ON";
+		}
+		else
+		{
+			GotoXY(30, 29);  std::cout << " Debug: OFF";
+		}
+		GotoXY(30, 30);  std::cout << " Exit";
 
 		system("PAUSE>NUL"); // Don't print last character
 
-		if (GetAsyncKeyState(VK_DOWN) && CursorXPos < 29) // Down Button pressed
+		if (GetAsyncKeyState(VK_DOWN) && CursorXPos < 30) // Down Button pressed
 		{
 			GotoXY(27, CursorXPos); std::cout << "  ";
 			CursorXPos++;
@@ -263,6 +285,7 @@ void Engine42::OpenMenu()
 					GotoXY(0, 27);  std::cout << std::string(Map.at(0).size(), ' ');
 					GotoXY(0, 28);  std::cout << std::string(Map.at(0).size(), ' ');
 					GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
+					GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
 					RedrawMap();
 
 					MenuTriggered = false; // Disable Menu & Start/Continue Game
@@ -270,11 +293,14 @@ void Engine42::OpenMenu()
 				case 1:
 					ClearScreen(); // Clear Game Screen
 
-					GotoXY(0, 0); // Reset Cursor
 					LoadDrawMapFile("ControlsScreen.txt"); // Load & Draw Map But Don't Fill Array
 
 					break;
 				case 2:
+					GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
+					ENABLE_DEBUGGER = !ENABLE_DEBUGGER;
+					break;
+				case 3:
 					MenuTriggered = false;
 					IsRunning = false;
 					break;
@@ -292,12 +318,12 @@ void Engine42::ClearScreen()
 	}
 }
 
-void Engine42::DebugPosition()
+void Engine42::Debug()
 {
 	//GotoXY(0, 25);
 	//std::cout << "Health: " << "\tArmor: " << "\tQuest Name: ";
 
-	GotoXY(0, 25); std::cout << "Player X: " <<  player.GetCoordinates().first << "\tPlayer Y: " << player.GetCoordinates().second;
+	GotoXY(0, 25); std::cout << "Player X: " << player.getXPos() << "\tPlayer Y: " << player.getYPos();
 
 	GotoXY(0, 26); std::cout << "NPC X: " << npc.getXPos() << "\tNPC Y: " << npc.getYPos();
 }
@@ -344,10 +370,61 @@ void Engine42::GotoXY(int X, int Y, std::string text)
 	std::cout << text;
 }
 
+void Engine42::ProcessCharacter(char c, int X, int Y)
+{
+	Point2D drop;
+	if (c != FLOOR || c != NULL) // If Current Character isn't a ' ' or isn't NOT initilized
+	{
+		switch (c)
+		{
+		case PLAYER:
+			playerStatsObj = BattleObject(PLAYER_START_HEALTH, PlayerName, PLAYER_START_ATTACK, PLAYER_START_DEFENSE); // Create BattleObject / Player Stats for battles
+
+			player = Player(std::make_pair(X, Y), PlayerName, playerStatsObj);
+			player.setCoordinates(X, Y);
+			break;
+
+		case VILLAGER:
+			// Instansiate NPC Object with X & Y Positions
+			npc = NPC(std::make_pair(X, Y), "Villager", dialogue, NPC_START_HEALTH);
+			break;
+
+		case MOB:
+			// Instantiate BattleObject
+			monsterStatsObj = BattleObject(MOB_START_HEALTH, "Monster", MOB_START_ATTACK, MOB_START_DEFENSE);
+
+			// Add Two Drops
+			drops.push_back("Sword of Doom");
+			drops.push_back("Golden Spork");
+
+			// Instansiate Monster Object with X & Y Positions
+			monsters.push_back(Monster(std::make_pair(X, Y), "Monster", drops, monsterStatsObj));
+			break;
+
+		case DOOR:
+			// Save Door Coordinates
+			DoorCoordinates.X = X;
+			DoorCoordinates.Y + Y;
+			break;
+
+		case DROP:
+			// Save All Drop Locations
+			drop = { X,Y };
+			DropCoordinates.push_back(drop);
+			break;
+
+		case COLLECTIBLE:
+			// Save Collectible Location
+			CollectibleCoordinates.X = X;
+			CollectibleCoordinates.Y = Y;
+			break;
+		}
+	}
+}
+
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;
-	Point2D drop;
 
 	std::ifstream file(FILENAME);
 	std::string line;
@@ -370,51 +447,8 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 				// Foreach character on line
 				for (char c : line)
 				{
-					if (c != FLOOR || c != NULL)
-					{
-						switch (c)
-						{
-						case PLAYER:
-							playerStatsObj = BattleObject(PLAYER_START_HEALTH, PlayerName, PLAYER_START_ATTACK, PLAYER_START_DEFENSE); // Create BattleObject / Player Stats for battles
 
-							player = Player(std::make_pair(X,Y), PlayerName, playerStatsObj);
-							player.setCoordinates(X, Y);
-
-							c = ' '; // Clear Player Char from Map Array When Player Position Set
-
-							break;
-						case VILLAGER:
-							// Instansiate NPC Object with X & Y Positions
-							npc = NPC(std::make_pair(X, Y), "Villager", dialogue, NPC_START_HEALTH);
-							break;
-						case MOB:
-							// Instantiate BattleObject
-							monsterStatsObj = BattleObject(MOB_START_HEALTH, "Monster", MOB_START_ATTACK, MOB_START_DEFENSE);
-
-							// Add Two Drops
-							drops.push_back("Sword of Doom");
-							drops.push_back("Golden Spork");
-
-							// Instansiate Monster Object with X & Y Positions
-							monsters.push_back(Monster(std::make_pair(X,Y), "Monster", drops, monsterStatsObj));
-							break;
-						case DOOR:
-							// Save Door Coordinates
-							DoorCoordinates.X = X;
-							DoorCoordinates.Y + Y;
-							break;
-						case DROP:
-							// Save All Drop Locations
-							drop = { X,Y };
-							DropCoordinates.push_back(drop);
-							break;
-						case COLLECTIBLE:
-							// Save Collectible Location
-							CollectibleCoordinates.X = X;
-							CollectibleCoordinates.Y = Y;
-							break;
-						}
-					}
+					ProcessCharacter(c, X, Y);
 
 					X++; // Increment X Position
 
@@ -434,10 +468,14 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 
 		MapLoaded = true;
 	}
+	
+	Map.at(player.getYPos()).at(player.getXPos()) = ' '; // Remove Player character from Map
 }
 
 void Engine42::LoadDrawMapFile(const std::string FILENAME)
 {
+	GotoXY(0, 0); // Reset Cursor
+
 	// Only Loads and Draws A Map e.g. ControlScreen, BattleScreen
 	std::ifstream file(FILENAME);
 	std::string line;

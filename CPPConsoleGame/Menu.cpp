@@ -5,6 +5,9 @@
 #include <string>
 #include<conio.h>
 
+// Class Unused
+// Vision: Create a modular menu system for C++ Console Game
+
 Menu::Menu()
 {
 	m_Height = 0;
