@@ -20,6 +20,7 @@
 
 bool IS_GAME_STARTED = false;
 bool ENABLE_DEBUGGER = false;
+const int MENU_HEIGHT = 10;
 
 int Engine42::IDCounter = 0;
 const int CONSOLE_SIZE[] = { 500, 625 };
@@ -302,10 +303,13 @@ void Engine42::OpenMenu()
 			{
 				case 0:
 					// Clear Main Menu
-					GotoXY(0, 27);  std::cout << std::string(Map.at(0).size(), ' ');
-					GotoXY(0, 28);  std::cout << std::string(Map.at(0).size(), ' ');
-					GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
-					GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 27);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 28);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
+
+					ClearMenu();
+
 					RedrawMap();
 
 					IS_GAME_STARTED = true;
@@ -334,9 +338,13 @@ void Engine42::LoadBattleScreen(Monster enemy)
 {
 	BattleEvent current = BattleEvent();
 
-	LoadDrawMapFile("BattleScreen.txt");
+	LoadDrawMapFile("BattleScreen.txt"); // ONLY Draw BattleScreen.txt
 
-	current.EventLoop(player, enemy);
+	current.EventLoop(player, enemy); // Start Battle Loop
+
+	ClearMenu(); // Clear Menu After Battle
+
+	RedrawMap(); // Redraw Loaded Map
 }
 
 void Engine42::ClearScreen()
@@ -609,5 +617,16 @@ void Engine42::LoadDrawMapFile(const std::string FILENAME)
 		}
 
 		file.close(); // Close File
+	}
+}
+
+void Engine42::ClearMenu()
+{
+	int MENU_YPOS = 27;
+
+	for (int i = 0; i < MENU_HEIGHT; i++)
+	{
+		GotoXY(0, MENU_YPOS);  std::cout << std::string(Map.at(0).size(), ' ');
+		MENU_YPOS++;
 	}
 }

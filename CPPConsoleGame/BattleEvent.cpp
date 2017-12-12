@@ -5,12 +5,13 @@
 #include <string>
 #include <windows.h>
 
+HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
+COORD CursorPosition; // used for goto
 
 BattleEvent::BattleEvent() 
 {
 }
-HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
-COORD CursorPosition; // used for goto
+
 void BattleEvent::EventLoop(Player player, Monster enemy)
 {
 	int menu_item = 0, x = 26;
@@ -65,6 +66,12 @@ void BattleEvent::EventLoop(Player player, Monster enemy)
 			case 2:
 				gotoXY(0, 32);
 				cout << "You Ran!";
+
+				Sleep(500);
+
+				gotoXY(0, 32);
+				cout << std::string(8, ' ');
+
 				running = false;
 				break;
 			}

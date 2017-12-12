@@ -56,5 +56,6 @@ public:
 	bool PlayerCollided();
 	void DetectPlayerCollision();
 	void LoadBattleScreen(Monster enemy);
+	void ClearMenu();
 };
 #endif
