@@ -1,5 +1,7 @@
 #pragma once
 #include "Weapon.h"
+#include "Player.h"
+#include "Monster.h"
 #include <string>
 #include <iostream>
 
@@ -25,13 +27,14 @@ public:
 	int getDefence();
 	bool isDefend();
 	void decreaseHealth(int damage);
-	void Attack(BattleObject& bo);
+	void Attack(Player bo);
+	void Attack(Monster bo);
 	void Defend();
 	void setWeapon(Weapon n);
 	bool checkIsDead();
-	void gainHealth(int heal);
 	bool getIsDead();
 	void setIsDead();
+	void setHealth(int health);
 	string toString();
 	~BattleObject();
 };

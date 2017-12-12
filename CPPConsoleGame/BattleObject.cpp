@@ -36,6 +36,15 @@ bool BattleObject::isDefend()
 {
 	return m_defend;
 }
+
+void BattleObject::setHealth(int damage)
+{
+	m_health -= damage;
+	if (m_health < 1)
+	{
+		m_health = 0;
+	}
+}
 void BattleObject::decreaseHealth(int damage) // set health
 {
 	cout  << " has taken " << to_string(damage) << " damage! ";
@@ -55,13 +64,28 @@ bool BattleObject::checkIsDead()
 	}
 	return false;
 }
-void BattleObject::gainHealth(int heal)
+
+void BattleObject::Attack(Player bo)
 {
-	m_health += heal;
+	int currentAttack = m_attack + m_weapon.getAttack(), curentDefence = getDefence() + bo.getWeapon().getDefence() ,damage;
+	if (bo.isDefend() == false)
+	{
+		damage = (2 * currentAttack) - bo.getDefence();
+	}
+	else
+	{
+		damage = ((2 * currentAttack) - (bo.getDefence() * 3));
+		bo.Defend();
+	}
+	if (damage < 1)
+	{
+		damage = 1;
+	}
+	bo.decreaseHealth(damage);
 }
-void BattleObject::Attack(BattleObject& bo)
+void BattleObject::Attack(Monster bo)
 {
-	int currentAttack = m_attack + m_weapon.getAttack(), curentDefence = bo.getDefence() + bo.getWeapon().getDefence() ,damage;
+	int currentAttack = m_attack + m_weapon.getAttack(), curentDefence = getDefence() + bo.getWeapon().getDefence(), damage;
 	if (bo.isDefend() == false)
 	{
 		damage = (2 * currentAttack) - bo.getDefence();

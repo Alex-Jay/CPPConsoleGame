@@ -31,12 +31,82 @@ string Player::toString()
 {
 	string items;
 	for (int i = 0; i < m_inventory.size(); i++) items += getItem(i) + "\n";
-	return  m_name + " " + "'inventory:\n " + items  + " Position at: " + GameObject::toString() + m_battle.toString();
+	return  m_name + " " + "'inventory:\n " + items  + " Position at: " + GameObject::toString() + BattleObject::toString();
+}
+Weapon Player::getWeapon()
+{
+	return BattleObject::getWeapon();
+}
+int Player::getHealth()
+{
+	return BattleObject::getHealth();
+}
+int Player::getAttack()
+{
+	return BattleObject::getAttack();
+}
+int Player::getDefence()
+{
+	return BattleObject::getDefence();
+}
+bool Player::isDefend()
+{
+	return BattleObject::isDefend();
+}
+void Player::setHealth(int damage)
+{
+	BattleObject::setHealth(damage);
+}
+void Player::decreaseHealth(int damage) // set health
+{
+	cout << " has taken " << to_string(damage) << " damage! ";
+	BattleObject::setHealth(damage);
+	cout << " has " << to_string(BattleObject::getHealth()) << " HP remaining!\n";
+	checkIsDead();
+}
+bool Player::checkIsDead()
+{
+	if (getHealth() < 1)
+	{
+		return true;
+	}
+	return false;
 }
 
-BattleObject* Player::getBattleOb()
+void Player::Attack(Monster bo)
 {
-	return &m_battle;
+	int currentAttack = BattleObject::getAttack() + BattleObject::getWeapon().getAttack(), curentDefence = BattleObject::getDefence() + bo.getDefence(), damage;
+	if (bo.isDefend() == false)
+	{
+		damage = (2 * currentAttack) - bo.getDefence();
+	}
+	else
+	{
+		damage = ((2 * currentAttack) - (bo.getDefence() * 3));
+		bo.Defend();
+	}
+	if (damage < 1)
+	{
+		damage = 1;
+	}
+	bo.decreaseHealth(damage);
+}
+
+void Player::Defend()
+{
+	BattleObject::Defend();
+}
+void Player::setWeapon(Weapon n)
+{
+	BattleObject::setWeapon(n);
+}
+void Player::setIsDead()
+{
+	BattleObject::setIsDead();
+}
+bool Player::getIsDead()
+{
+	BattleObject::getIsDead();
 }
 
 Player::~Player()

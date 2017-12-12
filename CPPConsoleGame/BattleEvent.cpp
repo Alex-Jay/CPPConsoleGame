@@ -55,14 +55,14 @@ void BattleEvent::EventLoop(Player player, Monster enemy)
 			case 0: {
 
 				gotoXY(0, 30);
-				m_player.Attack(m_enemy);
+				player.Attack(player);
 				break;
 			}
 
 
 			case 1: {
 				gotoXY(0, 28);
-				m_player.Defend();
+				player.Defend();
 				break;
 			}
 
@@ -79,7 +79,7 @@ void BattleEvent::EventLoop(Player player, Monster enemy)
 			if (m_enemy.getHealth() != 0)
 			{
 				gotoXY(0, 31);
-				m_enemy.Attack(m_player);
+				enemy.Attack(player);
 			}
 			else {
 				running = false;
