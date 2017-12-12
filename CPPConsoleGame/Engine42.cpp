@@ -18,6 +18,7 @@
 // BUG LOCATION:
 // MovePlayer()
 
+bool IS_GAME_STARTED = false;
 bool ENABLE_DEBUGGER = false;
 
 int Engine42::IDCounter = 0;
@@ -50,7 +51,7 @@ int MobStartAttack = 2;
 const int MOB_START_DEFENSE = 2;
 
 //Weapon Values
-Weapon weapons[2];
+Weapon weapons[2]; // Used an array
 int weaponNum = 0;
 
 // Door Location
@@ -61,9 +62,6 @@ std::vector<Point2D> DropCoordinates;
 
 // Collectible Location
 Point2D CollectibleCoordinates;
-
-// Reference Enums
-const enum GameObjects { PLAYER = 'P', VILLAGER = 'V', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
 
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
@@ -110,6 +108,8 @@ void Engine42::InitializeMap(const std::string FILENAME)
 // Any Update Logic Here
 void Engine42::Update()
 {
+	DetectPlayerCollision();
+
 	// Open Menu On First Boot
 	if (FirstCycle)
 	{
@@ -148,13 +148,12 @@ void Engine42::Run()
 
 	while (IsRunning)
 	{
-		if (PlayerCollided())
-		{
-		}
-		else {
-			Update();
-			Draw();
-		}
+		//if (PlayerCollided())
+		//{
+		//}
+
+		Update();
+		Draw();
 		Sleep(50); // TODO: Add Time System
 	}
 }
@@ -264,16 +263,16 @@ void Engine42::OpenMenu()
 	while (MenuTriggered)
 	{
 		// Controls
-		GotoXY(30, 27);  std::cout << " Start Game";
+		if (!IS_GAME_STARTED)
+		{ GotoXY(30, 27);  std::cout << " Start Game"; }
+		else { GotoXY(30, 27);  std::cout << " Continue"; }
+
+
 		GotoXY(30, 28);  std::cout << " Controls";
-		if (ENABLE_DEBUGGER)
-		{
-			GotoXY(30, 29);  std::cout << " Debug: ON";
-		}
-		else
-		{
-			GotoXY(30, 29);  std::cout << " Debug: OFF";
-		}
+
+		if (ENABLE_DEBUGGER){ GotoXY(30, 29);  std::cout << " Debug: ON"; }
+		else { GotoXY(30, 29);  std::cout << " Debug: OFF"; }
+
 		GotoXY(30, 30);  std::cout << " Exit";
 
 		system("PAUSE>NUL"); // Don't print last character
@@ -309,6 +308,7 @@ void Engine42::OpenMenu()
 					GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
 					RedrawMap();
 
+					IS_GAME_STARTED = true;
 					MenuTriggered = false; // Disable Menu & Start/Continue Game
 					break;
 				case 1:
@@ -333,8 +333,12 @@ void Engine42::OpenMenu()
 void Engine42::LoadBattleScreen(Monster enemy)
 {
 	BattleEvent current = BattleEvent();
+
+	LoadDrawMapFile("BattleScreen.txt");
+
 	current.EventLoop(player, enemy);
 }
+
 void Engine42::ClearScreen()
 {
 	// Clears Game Portion of the Screen
@@ -450,6 +454,7 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 		}
 	}
 }
+
 bool Engine42::PlayerCollided()
 {
 	for (auto& monsterCoord : monsters)
@@ -463,7 +468,8 @@ bool Engine42::PlayerCollided()
 	}
 	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
 	{
-		IsRunning = false;
+		//IsRunning = false;
+		LoadMapFile("Map2.txt");
 		return true;
 	}
 	for (int i = 0; i < sizeof(weapons); i++)
@@ -498,6 +504,36 @@ bool Engine42::PlayerCollided()
 	}
 	return false;
 }
+
+void Engine42::DetectPlayerCollision()
+{
+	for (Monster& monster : monsters)
+	{
+		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead())
+		{
+			LoadBattleScreen(monster);
+		}
+	}
+
+	for (int i = 0; i < sizeof(weapons); i++)
+	{
+		if (player.GetCoordinates() == std::make_pair(weapons[i].getX(), weapons[i].getY()))
+		{
+			GotoXY(0, 30); weapons[i].pickedUp();
+			player.setWeapon(weapons[i]);
+			weapons[i].setCoordinates(0, 0);
+		}
+	}
+
+	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
+	{
+		LoadMapFile("Map2.txt");
+		RedrawMap();
+	}
+
+
+}
+
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;
