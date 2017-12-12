@@ -28,7 +28,7 @@ public:
 	int getDefence();
 	bool isDefend();
 	void decreaseHealth(int damage);
-	void Attack(Monster bo);
+	int Attack(int defence);
 	void Defend();
 	void setWeapon(Weapon n);
 	bool checkIsDead();

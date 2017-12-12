@@ -49,9 +49,9 @@ void Monster::setHealth(int damage)
 }
 void Monster::decreaseHealth(int damage) // set health
 {
-	cout  << " has taken " << to_string(damage) << " damage! ";
+	cout  << m_name << " has taken " << to_string(damage) << " damage! ";
 	BattleObject::setHealth(damage);
-	cout << " has " << to_string(BattleObject::getHealth()) << " HP remaining!\n";
+	cout << m_name << " has " << to_string(BattleObject::getHealth()) << " HP remaining!\n";
 	checkIsDead();
 }
 bool Monster::checkIsDead()
@@ -63,23 +63,22 @@ bool Monster::checkIsDead()
 	return false;
 }
 
-void Monster::Attack(Player bo)
+int Monster::Attack(int defence, bool defend)
 {
-	int currentAttack = BattleObject::getAttack() + BattleObject::getWeapon().getAttack(), curentDefence = BattleObject::getDefence() + bo.getDefence() ,damage;
-	if (bo.isDefend() == false)
+	int currentAttack = BattleObject::getAttack() + BattleObject::getWeapon().getAttack(), damage;
+	if (defend == false)
 	{
-		damage = (2 * currentAttack) - bo.getDefence();
+		damage = (2 * currentAttack) - defence;
 	}
 	else
 	{
-		damage = ((2 * currentAttack) - (bo.getDefence() * 3));
-		bo.Defend();
+		damage = ((2 * currentAttack) - (defence * 3));
 	}
 	if (damage < 1)
 	{
 		damage = 1;
 	}
-	bo.decreaseHealth(damage);
+	return damage;
 }
 
 void Monster::Defend()
@@ -96,7 +95,7 @@ void Monster::setIsDead()
 }
 bool Monster::getIsDead()
 {
-	BattleObject::getIsDead();
+	return BattleObject::getIsDead();
 }
 
 Monster::~Monster()

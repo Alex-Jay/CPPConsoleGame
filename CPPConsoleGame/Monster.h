@@ -25,7 +25,7 @@ public:
 	int getDefence();
 	bool isDefend();
 	void decreaseHealth(int damage);
-	void Attack(Player bo);
+	int Attack(int defence, bool defend);
 	void Defend();
 	void setWeapon(Weapon n);
 	bool checkIsDead();

@@ -55,7 +55,7 @@ void BattleEvent::EventLoop(Player player, Monster enemy)
 			case 0: {
 
 				gotoXY(0, 30);
-				player.Attack(player);
+				enemy.decreaseHealth(player.Attack(enemy.getDefence));
 				break;
 			}
 
@@ -76,10 +76,10 @@ void BattleEvent::EventLoop(Player player, Monster enemy)
 
 			}
 
-			if (m_enemy.getHealth() != 0)
+			if (enemy.getHealth() != 0)
 			{
 				gotoXY(0, 31);
-				enemy.Attack(player);
+				player.decreaseHealth(enemy.Attack(player.getDefence(), player.isDefend()));
 			}
 			else {
 				running = false;
