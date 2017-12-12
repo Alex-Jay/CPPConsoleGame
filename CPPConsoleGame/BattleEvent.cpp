@@ -5,7 +5,7 @@
 #include <string>
 #include <windows.h>
 
-BattleEvent::BattleEvent(BattleObject player, BattleObject enemy) : m_player(player), m_enemy(enemy)
+BattleEvent::BattleEvent(BattleObject &player, BattleObject &enemy) : m_player(player), m_enemy(enemy)
 {
 }
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto

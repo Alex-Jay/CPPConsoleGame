@@ -7,7 +7,6 @@ NPC::NPC() {};
 NPC::NPC(std::pair<int, int> coordinates, string name, vector<string> dialogue, int health) : GameObject(coordinates), m_name(name), m_dialogue(dialogue), m_health(health)
 {
 
-
 }
 
 string NPC::getName()

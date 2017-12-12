@@ -8,7 +8,7 @@ class Weapon
 
 private:
 	string m_name;
-	int m_id, m_attack, m_defence;
+	int m_id, m_attack, m_defence, m_x, m_y;
 
 public:
 	Weapon();
@@ -19,6 +19,10 @@ public:
 	int getAttack();
 	int getDefence();
 	string toString();
+	void pickedUp();
+	void setCoordinates(int x, int y);
+	int getX();
+	int getY();
 
 	~Weapon();
 };

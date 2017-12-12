@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "NPC.h"
 #include "Monster.h"
+#include "BattleEvent.h"
 
 // TODO:
 // FIX BUG
@@ -46,6 +47,10 @@ const int MOB_START_HEALTH = 70;
 const int MOB_START_ATTACK = 2;
 const int MOB_START_DEFENSE = 2;
 
+//Weapon Values
+Weapon weapons[2];
+int weaponNum = 0;
+
 // Door Location
 Point2D DoorCoordinates;
 
@@ -77,6 +82,17 @@ void Engine42::SetConsoleSize(int height, int width)
 
 void Engine42::InitializeMap(const std::string FILENAME)
 {
+
+	//Initialize weapons
+	Weapon sword = Weapon("Sword of Doom", 10, 0);
+	weapons[0] = sword;
+	Weapon spork = Weapon("Golden Spork", 3, 6);
+	weapons[1] = spork;
+
+	//Initialize Dialogue
+	dialogue.push_back("Hello " + PlayerName + ", Welcome To Kai, City Of Skies.");
+	dialogue.push_back("Go on then, Go Explore!");
+
 	// Set Console Size
 	SetConsoleSize(CONSOLE_SIZE[0], CONSOLE_SIZE[1]);
 
@@ -86,9 +102,7 @@ void Engine42::InitializeMap(const std::string FILENAME)
 	//Draw Map Layout
 	DrawMap();
 
-	// Initialize Dialogue
-	dialogue.push_back("Hello " + PlayerName + ", Welcome To Kai, City Of Skies.");
-	dialogue.push_back("Go on then, Go Explore!");
+
 }
 
 // Any Update Logic Here
@@ -132,8 +146,13 @@ void Engine42::Run()
 
 	while (IsRunning)
 	{
-		Update();
-		Draw();
+		if (PlayerCollided())
+		{
+		}
+		else {
+			Update();
+			Draw();
+		}
 		Sleep(50); // TODO: Add Time System
 	}
 }
@@ -309,6 +328,11 @@ void Engine42::OpenMenu()
 	}
 }
 
+void Engine42::LoadBattleScreen(BattleObject player, BattleObject enemy)
+{
+	BattleEvent current = BattleEvent(player, enemy);
+	current.EventLoop();
+}
 void Engine42::ClearScreen()
 {
 	// Clears Game Portion of the Screen
@@ -404,13 +428,13 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 		case DOOR:
 			// Save Door Coordinates
 			DoorCoordinates.X = X;
-			DoorCoordinates.Y + Y;
+			DoorCoordinates.Y = Y;
 			break;
 
 		case DROP:
 			// Save All Drop Locations
-			drop = { X,Y };
-			DropCoordinates.push_back(drop);
+			weapons[weaponNum].setCoordinates(X, Y);
+			weaponNum++;
 			break;
 
 		case COLLECTIBLE:
@@ -421,7 +445,34 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 		}
 	}
 }
-
+bool Engine42::PlayerCollided()
+{
+	for (auto& monsterCoord : monsters)
+	{
+		if (player.GetCoordinates() == std::make_pair(monsterCoord.getXPos(), monsterCoord.getYPos()))
+		{
+			LoadBattleScreen(player.getBattleOb(), monsterCoord.getBattleOb());
+			monsterCoord.setCoordinates(0,0);
+			return true;
+		}
+	}
+	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
+	{
+		IsRunning = false;
+		return true;
+	}
+	for (int i = 0; i < sizeof(weapons); i++)
+	{
+		if (player.GetCoordinates() == std::make_pair(weapons[i].getX(), weapons[i].getY()))
+		{
+			weapons[i].pickedUp();
+			player.getBattleOb().setWeapon(weapons[i]);
+			weapons[i].setCoordinates(0,0);
+			return true;
+		}
+	}
+	return false;
+}
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;

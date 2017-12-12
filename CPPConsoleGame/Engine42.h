@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <Windows.h>
+#include "BattleObject.h"
 
 typedef std::vector<std::vector<char>> MapArray; // Define 2D Vector Array as 'MapArray' for Ease-of-Use
 const enum Direction { LEFT, RIGHT, UP, DOWN };
@@ -46,5 +47,7 @@ public:
 	void ProcessCharacter(char, int, int);
 	void LoadMapFile(const std::string);
 	void LoadDrawMapFile(const std::string);
+	bool PlayerCollided();
+	void LoadBattleScreen(BattleObject player, BattleObject enemy);
 };
 #endif
