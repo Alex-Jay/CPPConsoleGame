@@ -8,7 +8,11 @@
 #include "Monster.h"
 
 typedef std::vector<std::vector<char>> MapArray; // Define 2D Vector Array as 'MapArray' for Ease-of-Use
+
+// Reference Enums
+const enum GameObjects { PLAYER = 'P', VILLAGER = 'V', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
 const enum Direction { LEFT, RIGHT, UP, DOWN };
+
 struct Point2D
 {
 	int X, Y;
@@ -50,6 +54,7 @@ public:
 	void LoadMapFile(const std::string);
 	void LoadDrawMapFile(const std::string);
 	bool PlayerCollided();
+	void DetectPlayerCollision();
 	void LoadBattleScreen(Monster enemy);
 };
 #endif

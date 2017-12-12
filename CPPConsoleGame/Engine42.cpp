@@ -48,7 +48,7 @@ const int MOB_START_ATTACK = 2;
 const int MOB_START_DEFENSE = 2;
 
 //Weapon Values
-Weapon weapons[2];
+Weapon weapons[2]; // Used an array
 int weaponNum = 0;
 
 // Door Location
@@ -59,9 +59,6 @@ std::vector<Point2D> DropCoordinates;
 
 // Collectible Location
 Point2D CollectibleCoordinates;
-
-// Reference Enums
-const enum GameObjects { PLAYER = 'P', VILLAGER = 'V', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
 
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
@@ -108,6 +105,8 @@ void Engine42::InitializeMap(const std::string FILENAME)
 // Any Update Logic Here
 void Engine42::Update()
 {
+	DetectPlayerCollision();
+
 	// Open Menu On First Boot
 	if (FirstCycle)
 	{
@@ -146,13 +145,12 @@ void Engine42::Run()
 
 	while (IsRunning)
 	{
-		if (PlayerCollided())
-		{
-		}
-		else {
-			Update();
-			Draw();
-		}
+		//if (PlayerCollided())
+		//{
+		//}
+
+		Update();
+		Draw();
 		Sleep(50); // TODO: Add Time System
 	}
 }
@@ -331,8 +329,12 @@ void Engine42::OpenMenu()
 void Engine42::LoadBattleScreen(Monster enemy)
 {
 	BattleEvent current = BattleEvent();
+
+	LoadDrawMapFile("BattleScreen.txt");
+
 	current.EventLoop(player, enemy);
 }
+
 void Engine42::ClearScreen()
 {
 	// Clears Game Portion of the Screen
@@ -448,6 +450,7 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 		}
 	}
 }
+
 bool Engine42::PlayerCollided()
 {
 	for (auto& monsterCoord : monsters)
@@ -461,7 +464,8 @@ bool Engine42::PlayerCollided()
 	}
 	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
 	{
-		IsRunning = false;
+		//IsRunning = false;
+		LoadMapFile("Map2.txt");
 		return true;
 	}
 	for (int i = 0; i < sizeof(weapons); i++)
@@ -476,6 +480,38 @@ bool Engine42::PlayerCollided()
 	}
 	return false;
 }
+
+void Engine42::DetectPlayerCollision()
+{
+	for (Monster& monster : monsters)
+	{
+		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead())
+		{
+			LoadBattleScreen(monster);
+		}
+	}
+
+	for (int i = 0; i < sizeof(weapons); i++)
+	{
+		if (player.GetCoordinates() == std::make_pair(weapons[i].getX(), weapons[i].getY()))
+		{
+			GotoXY(0, 30); weapons[i].pickedUp();
+			player.setWeapon(weapons[i]);
+			weapons[i].setCoordinates(0, 0);
+		}
+	}
+
+
+
+	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
+	{
+		LoadMapFile("Map2.txt");
+		RedrawMap();
+	}
+
+
+}
+
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;
