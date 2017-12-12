@@ -399,6 +399,7 @@ void Engine42::GotoXY(int X, int Y, std::string text)
 void Engine42::ProcessCharacter(char c, int X, int Y)
 {
 	Point2D drop;
+
 	if (c != FLOOR || c != NULL) // If Current Character isn't a ' ' or isn't NOT initilized
 	{
 		switch (c)

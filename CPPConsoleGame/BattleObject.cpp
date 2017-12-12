@@ -65,42 +65,6 @@ bool BattleObject::checkIsDead()
 	return false;
 }
 
-void BattleObject::Attack(Player bo)
-{
-	int currentAttack = m_attack + m_weapon.getAttack(), curentDefence = getDefence() + bo.getWeapon().getDefence() ,damage;
-	if (bo.isDefend() == false)
-	{
-		damage = (2 * currentAttack) - bo.getDefence();
-	}
-	else
-	{
-		damage = ((2 * currentAttack) - (bo.getDefence() * 3));
-		bo.Defend();
-	}
-	if (damage < 1)
-	{
-		damage = 1;
-	}
-	bo.decreaseHealth(damage);
-}
-void BattleObject::Attack(Monster bo)
-{
-	int currentAttack = m_attack + m_weapon.getAttack(), curentDefence = getDefence() + bo.getWeapon().getDefence(), damage;
-	if (bo.isDefend() == false)
-	{
-		damage = (2 * currentAttack) - bo.getDefence();
-	}
-	else
-	{
-		damage = ((2 * currentAttack) - (bo.getDefence() * 3));
-		bo.Defend();
-	}
-	if (damage < 1)
-	{
-		damage = 1;
-	}
-	bo.decreaseHealth(damage);
-}
 void BattleObject::Defend()
 {
 	if (m_defend == true)
