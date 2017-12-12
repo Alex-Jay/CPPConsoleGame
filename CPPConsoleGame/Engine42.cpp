@@ -512,6 +512,7 @@ void Engine42::DetectPlayerCollision()
 		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead())
 		{
 			LoadBattleScreen(monster);
+			monster.setIsDead();
 		}
 	}
 

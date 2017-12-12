@@ -50,30 +50,23 @@ void BattleEvent::EventLoop(Player player, Monster enemy)
 
 		if (GetAsyncKeyState(VK_RETURN)) { // Enter key pressed
 
-			switch (menu_item) {
-
-			case 0: {
-
+			switch (menu_item) 
+			{
+			case 0:
 				gotoXY(0, 30);
 				enemy.decreaseHealth(player.Attack(enemy.getDefence()));
 				break;
-			}
 
-
-			case 1: {
+			case 1:
 				gotoXY(0, 28);
 				player.Defend();
 				break;
-			}
 
-			case 2: {
+			case 2:
 				gotoXY(0, 32);
 				cout << "You Ran!";
 				running = false;
 				break;
-			}
-
-
 			}
 
 			if (enemy.getHealth() != 0)
