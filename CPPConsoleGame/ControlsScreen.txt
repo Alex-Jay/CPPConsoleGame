@@ -1,0 +1,24 @@
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X                                                                        X
+X       Main Menu                                                        X
+X                                                                        X
+X     =============                                                      X
+X     | __ __  __ |                                                      X
+X     ||_ |__ |   |            Move Up                                   X
+X     ||__ __||__ |                                                      X
+X     |           |         =============                                X
+X     =============         |     ^     |                                X
+X                           |   / | \   |                                X
+X                           |  /  |  \  |                                X
+X                           |     |     |                                X
+X                           =============                                X
+X            =============  =============  =============                 X
+X            |    /      |  |     |     |  |      \    |                 X
+X            |   /___    |  |  \  |  /  |  |   ____\   |                 X
+X  Move Left |   \       |  |   \ | /   |  |       /   |    Move Right   X
+X            |    \      |  |     V     |  |      /    |                 X
+X            =============  =============  =============                 X
+X                                                                        X
+X                             Move Down                                  X
+X                                                                        X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

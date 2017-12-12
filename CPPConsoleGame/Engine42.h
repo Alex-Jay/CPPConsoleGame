@@ -7,6 +7,10 @@
 
 typedef std::vector<std::vector<char>> MapArray; // Define 2D Vector Array as 'MapArray' for Ease-of-Use
 const enum Direction { LEFT, RIGHT, UP, DOWN };
+struct Point2D
+{
+	int X, Y;
+};
 
 class Engine42
 {
@@ -22,8 +26,6 @@ public:
 
 	MapArray Map; // Using Outer Vectors index as Y-Position and using Inner Vectors index of as X-Poition, Inner Vector Contents Contain Character at Position.
 
-	std::pair<int, int> PlayerPosition;
-
 	Engine42();
 	int GetID() { return m_id; }
 	void InitializeMap(const std::string);
@@ -32,8 +34,9 @@ public:
 	void Run();
 	std::string GetMapName() { return m_MapName; }
 	virtual void Draw();
-	void DrawMap(const std::string);
+	void DrawMap();
 	void RedrawMap();
+	void ClearScreen();
 	void MovePlayer(enum Direction, int MovementSpeed = 80);
 	void DebugPosition();
 	void ListenKeyInput();
@@ -41,5 +44,6 @@ public:
 	void GotoXY(int, int, std::string);
 	void OpenMenu();
 	void LoadMapFile(const std::string);
+	void LoadDrawMapFile(const std::string);
 };
 #endif

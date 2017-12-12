@@ -2,12 +2,15 @@
 #include "BattleObject.h"
 
 
+BattleObject::BattleObject()
+{
+
+}
 
 BattleObject::BattleObject(int health, string name, int attack, int defence) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false)
 {
-	
-
 }
+
 BattleObject::BattleObject(int health, string name, int attack, int defence, Weapon weapon) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false), m_weapon(weapon)
 {
 

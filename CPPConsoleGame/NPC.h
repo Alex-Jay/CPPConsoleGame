@@ -11,6 +11,7 @@ private:
 	std::vector<std::string> m_dialogue;
 	int m_health;
 public:
+	NPC();
 	NPC(std::pair<int, int> coordinates, string name, vector<string> dialogue, int health);
 	string getName();
 	vector<string> getDialogue();

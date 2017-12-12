@@ -176,6 +176,8 @@
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="BattleScreen.txt" />
+    <Text Include="ControlsScreen.txt" />
     <Text Include="Map1.txt" />
     <Text Include="Map2.txt" />
     <Text Include="Map3.txt" />

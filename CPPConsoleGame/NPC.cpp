@@ -2,6 +2,7 @@
 #include "NPC.h"
 #include <vector>
 
+NPC::NPC() {};
 
 NPC::NPC(std::pair<int, int> coordinates, string name, vector<string> dialogue, int health) : m_name(name), m_dialogue(dialogue), m_health(health)
 {

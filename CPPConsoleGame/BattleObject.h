@@ -15,6 +15,7 @@ private:
 
 
 public:
+	BattleObject();
 	BattleObject(int health, string name, int attack, int defence, Weapon weapon);
 	BattleObject(int health, string name, int attack, int defence);
 

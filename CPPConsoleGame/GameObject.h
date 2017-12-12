@@ -10,9 +10,10 @@ public:
 	GameObject(std::pair<int, int> coordinates);
 	GameObject();
 	std::pair<int, int> getCoordinates();
+	void setCoordinates(int x, int y) { m_coordinates.first = x; m_coordinates.second = y; };
+	int getXPos() { return m_coordinates.first; }
+	int getYPos() { return m_coordinates.second; }
 	bool getBreakable();
-	int getXPos();
-	int getYPos();
 	std::string toString();
 	~GameObject();
 };

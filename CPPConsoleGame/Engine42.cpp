@@ -6,16 +6,59 @@
 #include <string>
 #include <windows.h>
 #include "Menu.h"
+#include "Player.h"
+#include "NPC.h"
+#include "Monster.h"
+
+// TODO:
+// FIX BUG
+// Player Y Position increments in (Y + 10) and then suddenly increments normally in (Y + 1)
+//
+// BUG LOCATION:
+// MovePlayer()
 
 int Engine42::IDCounter = 0;
-const int CONSOLESIZE[] = { 500,700 };
+const int CONSOLE_SIZE[] = { 500, 625 };
+const int PLAYER_START_HEALTH = 100;
+const int PLAYER_START_ATTACK = 5;
+const int PLAYER_START_DEFENSE = 4;
+
 bool MenuTriggered = true;
 bool FirstCycle = true;
-const enum GameObjects { PLAYER = 'P', NPC = 'N', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
+
+// Player Values
+Player player;
+BattleObject playerStatsObj;
+std::string PlayerName = "Player";
+
+// NPC Values
+NPC npc;
+std::vector<std::string> dialogue;
+const int NPC_START_HEALTH = 999;
+
+// Monster Values
+std::vector<Monster> monsters;
+std::vector<std::string> drops;
+BattleObject monsterStatsObj;
+const int MOB_START_HEALTH = 70;
+const int MOB_START_ATTACK = 2;
+const int MOB_START_DEFENSE = 2;
+
+// Door Location
+Point2D DoorCoordinates;
+
+// Drops
+std::vector<Point2D> DropCoordinates;
+
+// Collectible Location
+Point2D CollectibleCoordinates;
+
+// Reference Enums
+const enum GameObjects { PLAYER = 'P', VILLAGER = 'N', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
 
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
-	// Initialize Handle
+	// Initialize Handle For using GotoXY()
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
@@ -33,10 +76,17 @@ void Engine42::SetConsoleSize(int height, int width)
 void Engine42::InitializeMap(const std::string FILENAME)
 {
 	// Set Console Size
-	SetConsoleSize(500, 700);
+	SetConsoleSize(CONSOLE_SIZE[0], CONSOLE_SIZE[1]);
+
+	// Load The Map
+	LoadMapFile(FILENAME);
 
 	//Draw Map Layout
-	DrawMap(FILENAME);
+	DrawMap();
+
+	// Initialize Dialogue
+	dialogue.push_back("Hello " + PlayerName + ", Welcome To Kai, City Of Skies.");
+	dialogue.push_back("Go on then, Go Explore!");
 }
 
 void Engine42::Update()
@@ -48,32 +98,18 @@ void Engine42::Update()
 		FirstCycle = false;
 	}
 
-	// Remove Entities from Map array for Redraw
-	//switch (Map.at(PlayerPosition.first).at(PlayerPosition.second))
-	//{
-	//	case MOB:
-	//		// Map.at(PlayerPosition.first).at(PlayerPosition.second) = ' ';
-	//		break;
-	//	case DROP:
-	//		// Map.at(PlayerPosition.first).at(PlayerPosition.second) = ' ';
-	//		break;
-	//	case COLLECTIBLE:
-	//		// Map.at(PlayerPosition.first).at(PlayerPosition.second) = ' ';
-	//		break;
-	//}
-
 	//Listen To Input
 	ListenKeyInput();
 
-	//DebugPosition();
+	DebugPosition();
 }
 
 void Engine42::Run()
 {
-	//Pre-Initialise Spawn Location if Not Found
-	PlayerPosition.first = 4; // X Position
-	PlayerPosition.second = 6; // Y Position
+	// Pre-Initialise Spawn Location if Not Found
+	player.setCoordinates(4, 6);
 
+	// Initialize Map
 	InitializeMap("Map3.txt");
 
 	if (MapLoaded)
@@ -85,20 +121,19 @@ void Engine42::Run()
 	{
 		Update();
 		Draw();
-		Sleep(50);
+		Sleep(50); // TODO: Add Time System
 	}
 }
 
 void Engine42::Draw()
 {
-	GotoXY(PlayerPosition.first, PlayerPosition.second, "P"); //Stringify Icon
+	//Draw Player Position
+	GotoXY(player.getXPos(), player.getYPos(), "P");
 }
 
-void Engine42::DrawMap(const std::string FILENAME)
+void Engine42::DrawMap()
 {
-	LoadMapFile(FILENAME);
-
-	m_MapName = FILENAME;
+	//Draw Initialized Map
 
 	if (MapLoaded)
 	{
@@ -121,7 +156,10 @@ void Engine42::DrawMap(const std::string FILENAME)
 
 void Engine42::RedrawMap()
 {
+	// Redraw Initialized Map
+
 	GotoXY(0, 0); // Reset cursor before redrawing the map
+
 	for (auto& YPos : Map)
 	{
 		for (auto& XPos: YPos)
@@ -134,43 +172,46 @@ void Engine42::RedrawMap()
 
 void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 {
+	int PlayerX = player.getXPos(), PlayerY = player.getYPos(); // Retrieve and Copy Player Position Values.
 
-	int X = PlayerPosition.first;
-	int Y = PlayerPosition.second;
 	switch (DIRECTION)
 	{
 	case RIGHT:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
+		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(Y).at(X+1) != WALL)
+		if (Map.at(PlayerY).at(PlayerX + 1) != WALL) // If Character 1 Space to the Right of Player is NOT a Wall, Move Right
 		{
-			PlayerPosition.first++;
+			PlayerX++;
+			player.setCoordinates(PlayerX, PlayerY);
 		}
 		break;
 
 	case LEFT:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
+		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(Y).at(X-1) != WALL)
+		if (Map.at(PlayerY).at(PlayerX-1) != WALL) // If Character 1 Space to the Left of Player is NOT a Wall, Move Left
 		{
-			PlayerPosition.first--;
+			PlayerX--;
+			player.setCoordinates(PlayerX, PlayerY);
 		}
 		break;
 
 	case UP:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
+		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(Y-1).at(X) != WALL)
+		if (Map.at(PlayerY-1).at(PlayerX) != WALL) // If Character 1 Space Upwards from Player is NOT a Wall, Move Up
 		{
-			PlayerPosition.second--;
+			PlayerY--;
+			player.setCoordinates(PlayerX, PlayerY);
 		}
 		break;
 
 	case DOWN:
-		GotoXY(PlayerPosition.first, PlayerPosition.second, " ");
-		if (Map.at(Y+1).at(X) != WALL)
+		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
+		if (Map.at(PlayerY+1).at(PlayerX) != WALL) // If Character 1 Space Downwards from Player is NOT a Wall, Move Down
 		{
-			PlayerPosition.second++;
+			PlayerY++;
+			player.setCoordinates(PlayerX, PlayerY);
 		}
 		break;
 	}
@@ -178,21 +219,23 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 
 void Engine42::OpenMenu()
 {
+	// Set Menu While Loop
 	MenuTriggered = true;
 
-	GotoXY(27,27); std::cout << "->";
+	GotoXY(27,27); std::cout << "->"; // Draw Intial Arrow
 
 	int Menu_Item = 0, CursorXPos = 27;
 
 	while (MenuTriggered)
 	{
+		// Controls
 		GotoXY(30, 27);  std::cout << " Start Game";
-		GotoXY(30, 28);  std::cout << " Options";
+		GotoXY(30, 28);  std::cout << " Controls";
 		GotoXY(30, 29);  std::cout << " Exit";
 
-		system("PAUSE>NUL");
+		system("PAUSE>NUL"); // Don't print last character
 
-		if (GetAsyncKeyState(VK_DOWN) && CursorXPos < 29) //down button pressed
+		if (GetAsyncKeyState(VK_DOWN) && CursorXPos < 29) // Down Button pressed
 		{
 			GotoXY(27, CursorXPos); std::cout << "  ";
 			CursorXPos++;
@@ -202,7 +245,7 @@ void Engine42::OpenMenu()
 
 		}
 
-		if (GetAsyncKeyState(VK_UP) && CursorXPos > 27) //up button pressed
+		if (GetAsyncKeyState(VK_UP) && CursorXPos > 27) // Up Button pressed
 		{
 			GotoXY(27, CursorXPos); std::cout << "  ";
 			CursorXPos--;
@@ -220,9 +263,16 @@ void Engine42::OpenMenu()
 					GotoXY(0, 27);  std::cout << std::string(Map.at(0).size(), ' ');
 					GotoXY(0, 28);  std::cout << std::string(Map.at(0).size(), ' ');
 					GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
-					MenuTriggered = false;
+					RedrawMap();
+
+					MenuTriggered = false; // Disable Menu & Start/Continue Game
 					break;
 				case 1:
+					ClearScreen(); // Clear Game Screen
+
+					GotoXY(0, 0); // Reset Cursor
+					LoadDrawMapFile("ControlsScreen.txt"); // Load & Draw Map But Don't Fill Array
+
 					break;
 				case 2:
 					MenuTriggered = false;
@@ -233,14 +283,26 @@ void Engine42::OpenMenu()
 	}
 }
 
+void Engine42::ClearScreen()
+{
+	// Clears Game Portion of the Screen
+	for (int i = 0; i < Map.size(); i++)
+	{
+		GotoXY(0, i); std::cout << std::string(Map.at(i).size(), ' ');
+	}
+}
+
 void Engine42::DebugPosition()
 {
-	GotoXY(0, 25);
-	std::cout << "Health: " << "\tArmor: " << "\tQuest Name: ";
+	//GotoXY(0, 25);
+	//std::cout << "Health: " << "\tArmor: " << "\tQuest Name: ";
+
+	GotoXY(0, 25); std::cout << "Player X: " <<  player.GetCoordinates().first << "\tPlayer Y: " << player.GetCoordinates().second;
 }
 
 void Engine42::ListenKeyInput()
 {
+	// 0x8000 checks the last bit of GetAsyncKeyState return data -> user is holding input
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
 		MovePlayer(UP);
@@ -283,6 +345,7 @@ void Engine42::GotoXY(int X, int Y, std::string text)
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;
+
 	std::ifstream file(FILENAME);
 	std::string line;
 
@@ -301,6 +364,7 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 
 			if (!line.empty())
 			{
+				// Foreach character on line
 				for (char c : line)
 				{
 					if (c != FLOOR || c != NULL)
@@ -308,26 +372,43 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 						switch (c)
 						{
 						case PLAYER:
-							PlayerPosition.first = X;
-							PlayerPosition.second = Y;
-							c = ' ';
+							playerStatsObj = BattleObject(PLAYER_START_HEALTH, PlayerName, PLAYER_START_ATTACK, PLAYER_START_DEFENSE); // Create BattleObject / Player Stats for battles
 
-							// Instansiate Monster Object with X & Y Positions
+							player = Player(std::make_pair(X,Y), PlayerName, playerStatsObj);
+							player.setCoordinates(X, Y);
+
+							c = ' '; // Clear Player Char from Map Array When Player Position Set
+
 							break;
-						case NPC:
+						case VILLAGER:
 							// Instansiate NPC Object with X & Y Positions
+							npc = NPC(std::make_pair(X, Y), "Villager", dialogue, NPC_START_HEALTH);
 							break;
 						case MOB:
+							// Instantiate BattleObject
+							monsterStatsObj = BattleObject(MOB_START_HEALTH, "Monster", MOB_START_ATTACK, MOB_START_DEFENSE);
+
+							// Add Two Drops
+							drops.push_back("Sword of Doom");
+							drops.push_back("Golden Spork");
+
 							// Instansiate Monster Object with X & Y Positions
+							monsters.push_back(Monster(std::make_pair(X,Y), "Monster", drops, monsterStatsObj));
 							break;
 						case DOOR:
-							// Do Door Logic
+							// Save Door Coordinates
+							DoorCoordinates.X = X;
+							DoorCoordinates.Y + Y;
 							break;
 						case DROP:
-							// Do Drop Object - Randomize Drop?
+							// Save All Drop Locations
+							Point2D drop = { X,Y };
+							DropCoordinates.push_back(drop);
 							break;
 						case COLLECTIBLE:
-							// Do Collectible Logic
+							// Save Collectible Location
+							CollectibleCoordinates.X = X;
+							CollectibleCoordinates.Y = Y;
 							break;
 						}
 					}
@@ -349,5 +430,31 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 		file.close(); // Close File
 
 		MapLoaded = true;
+	}
+}
+
+void Engine42::LoadDrawMapFile(const std::string FILENAME)
+{
+	// Only Loads and Draws A Map e.g. ControlScreen, BattleScreen
+	std::ifstream file(FILENAME);
+	std::string line;
+
+	if (file.is_open()) // Test if File Opens Successfully
+	{
+		while (file.good()) // Loop While File Is In A Good State
+		{
+			getline(file, line);
+
+			if (!line.empty())
+			{
+				for (char c : line)
+				{
+					std::cout << c;
+				}
+			}
+			std::cout << std::endl;
+		}
+
+		file.close(); // Close File
 	}
 }

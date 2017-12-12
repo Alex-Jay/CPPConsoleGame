@@ -13,7 +13,11 @@ private:
 	std::vector<std::string> m_inventory;
 	BattleObject m_battle;
 public:
-	Player(std::pair<int, int> coordinates, string name, vector<string> inventory,  BattleObject battle);
+	Player();
+	Player(std::pair<int, int>, string, BattleObject);
+	void SetCooridnates(int, int);
+	void MoveLeft();
+	std::pair<int, int> GetCoordinates() { return std::make_pair(GameObject::getXPos(), GameObject::getYPos()); }
 	string getName();
 	vector<string> getInventory();
 	string getItem(int num);
