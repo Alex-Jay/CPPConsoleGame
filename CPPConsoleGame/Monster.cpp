@@ -2,7 +2,7 @@
 #include "Monster.h"
 
 
-Monster::Monster(std::pair<int, int> coordinates, string name, vector<string> drops, BattleObject battle) : m_name(name), m_drops(drops), m_battle(battle)
+Monster::Monster(std::pair<int, int> coordinates, string name, vector<string> drops, BattleObject battle) : GameObject(coordinates), m_name(name), m_drops(drops), m_battle(battle)
 {
 
 

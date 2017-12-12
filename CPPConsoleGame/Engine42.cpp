@@ -54,7 +54,7 @@ std::vector<Point2D> DropCoordinates;
 Point2D CollectibleCoordinates;
 
 // Reference Enums
-const enum GameObjects { PLAYER = 'P', VILLAGER = 'N', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
+const enum GameObjects { PLAYER = 'P', VILLAGER = 'V', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
 
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
