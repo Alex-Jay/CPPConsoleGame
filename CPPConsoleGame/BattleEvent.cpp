@@ -5,12 +5,13 @@
 #include <string>
 #include <windows.h>
 
+HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
+COORD CursorPosition; // used for goto
 
 BattleEvent::BattleEvent() 
 {
 }
-HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
-COORD CursorPosition; // used for goto
+
 void BattleEvent::EventLoop(Player player, Monster enemy)
 {
 	int menu_item = 0, x = 26;
@@ -50,30 +51,29 @@ void BattleEvent::EventLoop(Player player, Monster enemy)
 
 		if (GetAsyncKeyState(VK_RETURN)) { // Enter key pressed
 
-			switch (menu_item) {
-
-			case 0: {
-
+			switch (menu_item) 
+			{
+			case 0:
 				gotoXY(0, 30);
 				enemy.decreaseHealth(player.Attack(enemy.getDefence()));
 				break;
-			}
 
-
-			case 1: {
+			case 1:
 				gotoXY(0, 28);
 				player.Defend();
 				break;
-			}
 
-			case 2: {
+			case 2:
 				gotoXY(0, 32);
 				cout << "You Ran!";
+
+				Sleep(500);
+
+				gotoXY(0, 32);
+				cout << std::string(8, ' ');
+
 				running = false;
 				break;
-			}
-
-
 			}
 
 			if (enemy.getHealth() != 0)

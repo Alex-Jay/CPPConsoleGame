@@ -20,6 +20,7 @@
 
 bool IS_GAME_STARTED = false;
 bool ENABLE_DEBUGGER = false;
+const int MENU_HEIGHT = 10;
 
 int Engine42::IDCounter = 0;
 const int CONSOLE_SIZE[] = { 500, 625 };
@@ -213,7 +214,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case RIGHT:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(PlayerY).at(PlayerX + 1) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space to the Right of Player is NOT a Wall, Move Right
+		if (Map.at(PlayerY).at(PlayerX + 1) != WALL) // If Character 1 Space to the Right of Player is NOT a Wall, Move Right
 		{
 			PlayerX++;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -223,7 +224,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case LEFT:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(PlayerY).at(PlayerX-1) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space to the Left of Player is NOT a Wall, Move Left
+		if (Map.at(PlayerY).at(PlayerX-1) != WALL) // If Character 1 Space to the Left of Player is NOT a Wall, Move Left
 		{
 			PlayerX--;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -233,7 +234,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case UP:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(PlayerY-1).at(PlayerX) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space Upwards from Player is NOT a Wall, Move Up
+		if (Map.at(PlayerY-1).at(PlayerX) != WALL) // If Character 1 Space Upwards from Player is NOT a Wall, Move Up
 		{
 			PlayerY--;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -242,7 +243,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 
 	case DOWN:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
-		if (Map.at(PlayerY+1).at(PlayerX) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space Downwards from Player is NOT a Wall, Move Down
+		if (Map.at(PlayerY+1).at(PlayerX) != WALL) // If Character 1 Space Downwards from Player is NOT a Wall, Move Down
 		{
 			PlayerY++;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -302,10 +303,13 @@ void Engine42::OpenMenu()
 			{
 				case 0:
 					// Clear Main Menu
-					GotoXY(0, 27);  std::cout << std::string(Map.at(0).size(), ' ');
-					GotoXY(0, 28);  std::cout << std::string(Map.at(0).size(), ' ');
-					GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
-					GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 27);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 28);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
+					//GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
+
+					ClearMenu();
+
 					RedrawMap();
 
 					IS_GAME_STARTED = true;
@@ -334,9 +338,13 @@ void Engine42::LoadBattleScreen(Monster enemy)
 {
 	BattleEvent current = BattleEvent();
 
-	LoadDrawMapFile("BattleScreen.txt");
+	LoadDrawMapFile("BattleScreen.txt"); // ONLY Draw BattleScreen.txt
 
-	current.EventLoop(player, enemy);
+	current.EventLoop(player, enemy); // Start Battle Loop
+
+	ClearMenu(); // Clear Menu After Battle
+
+	RedrawMap(); // Redraw Loaded Map
 }
 
 void Engine42::ClearScreen()
@@ -512,7 +520,7 @@ void Engine42::DetectPlayerCollision()
 		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead())
 		{
 			LoadBattleScreen(monster);
-
+			monster.setIsDead();
 		}
 	}
 
@@ -526,27 +534,6 @@ void Engine42::DetectPlayerCollision()
 		}
 	}
 
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 2; j++)
-		{
-			if (player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() + 2))
-			{
-				notSpoken = true;
-			}
-			else if (player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j) && notSpoken)
-			{
-				GotoXY(0,26);
-				cout << npc.getDialogueSeg(ns)<< endl;
-				ns++;
-				notSpoken = false;
-				if (ns > npc.getDialogue().size())
-				{
-					ns = 0;
-				}
-			}
-		}
-	}
 	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
 	{
 		LoadMapFile("Map2.txt");
@@ -630,5 +617,16 @@ void Engine42::LoadDrawMapFile(const std::string FILENAME)
 		}
 
 		file.close(); // Close File
+	}
+}
+
+void Engine42::ClearMenu()
+{
+	int MENU_YPOS = 27;
+
+	for (int i = 0; i < MENU_HEIGHT; i++)
+	{
+		GotoXY(0, MENU_YPOS);  std::cout << std::string(Map.at(0).size(), ' ');
+		MENU_YPOS++;
 	}
 }
