@@ -4,7 +4,6 @@
 #include "Monster.h"
 class BattleEvent
 {
-	BattleObject m_player, m_enemy;
 public:
 	BattleEvent();
 	void EventLoop(Player player, Monster enemy);
