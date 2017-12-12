@@ -298,6 +298,8 @@ void Engine42::DebugPosition()
 	//std::cout << "Health: " << "\tArmor: " << "\tQuest Name: ";
 
 	GotoXY(0, 25); std::cout << "Player X: " <<  player.GetCoordinates().first << "\tPlayer Y: " << player.GetCoordinates().second;
+
+	GotoXY(0, 26); std::cout << "NPC X: " << npc.getXPos() << "\tNPC Y: " << npc.getYPos();
 }
 
 void Engine42::ListenKeyInput()
@@ -345,6 +347,7 @@ void Engine42::GotoXY(int X, int Y, std::string text)
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;
+	Point2D drop;
 
 	std::ifstream file(FILENAME);
 	std::string line;
@@ -402,7 +405,7 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 							break;
 						case DROP:
 							// Save All Drop Locations
-							Point2D drop = { X,Y };
+							drop = { X,Y };
 							DropCoordinates.push_back(drop);
 							break;
 						case COLLECTIBLE:
