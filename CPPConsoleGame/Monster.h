@@ -2,7 +2,6 @@
 #include "GameObject.h"
 #include "BattleObject.h"
 #include "Player.h"
-#include "Weapon.h"
 #include <string>
 #include <vector>
 using namespace std;
