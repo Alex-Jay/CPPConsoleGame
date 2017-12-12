@@ -213,7 +213,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case RIGHT:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(PlayerY).at(PlayerX + 1) != WALL) // If Character 1 Space to the Right of Player is NOT a Wall, Move Right
+		if (Map.at(PlayerY).at(PlayerX + 1) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space to the Right of Player is NOT a Wall, Move Right
 		{
 			PlayerX++;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -223,7 +223,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case LEFT:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(PlayerY).at(PlayerX-1) != WALL) // If Character 1 Space to the Left of Player is NOT a Wall, Move Left
+		if (Map.at(PlayerY).at(PlayerX-1) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space to the Left of Player is NOT a Wall, Move Left
 		{
 			PlayerX--;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -233,7 +233,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 	case UP:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
 
-		if (Map.at(PlayerY-1).at(PlayerX) != WALL) // If Character 1 Space Upwards from Player is NOT a Wall, Move Up
+		if (Map.at(PlayerY-1).at(PlayerX) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space Upwards from Player is NOT a Wall, Move Up
 		{
 			PlayerY--;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -242,7 +242,7 @@ void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 
 	case DOWN:
 		GotoXY(PlayerX, PlayerY, " "); // Erase Players Current Position
-		if (Map.at(PlayerY+1).at(PlayerX) != WALL) // If Character 1 Space Downwards from Player is NOT a Wall, Move Down
+		if (Map.at(PlayerY+1).at(PlayerX) != WALL && Map.at(PlayerY).at(PlayerX + 1) != VILLAGER) // If Character 1 Space Downwards from Player is NOT a Wall, Move Down
 		{
 			PlayerY++;
 			player.setCoordinates(PlayerX, PlayerY);
@@ -512,6 +512,7 @@ void Engine42::DetectPlayerCollision()
 		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead())
 		{
 			LoadBattleScreen(monster);
+
 		}
 	}
 
@@ -525,6 +526,27 @@ void Engine42::DetectPlayerCollision()
 		}
 	}
 
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			if (player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() + 2))
+			{
+				notSpoken = true;
+			}
+			else if (player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j) && notSpoken)
+			{
+				GotoXY(0,26);
+				cout << npc.getDialogueSeg(ns)<< endl;
+				ns++;
+				notSpoken = false;
+				if (ns > npc.getDialogue().size())
+				{
+					ns = 0;
+				}
+			}
+		}
+	}
 	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
 	{
 		LoadMapFile("Map2.txt");
