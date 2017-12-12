@@ -19,6 +19,6 @@ X                                    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X                         M                                            ^ X
 X                                                                        X
 X                                             M                          X
-X                                                                        "
+X                                                                       "X
 X *        O                                                             X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

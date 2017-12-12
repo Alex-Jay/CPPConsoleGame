@@ -14,6 +14,7 @@ public:
 	NPC();
 	NPC(std::pair<int, int> coordinates, string name, vector<string> dialogue, int health);
 	string getName();
+	std::pair<int, int> GetCoordinates() { return std::make_pair(GameObject::getXPos(), GameObject::getYPos()); }
 	vector<string> getDialogue();
 	string getDialogueSeg(int num);
 	int getHealth();

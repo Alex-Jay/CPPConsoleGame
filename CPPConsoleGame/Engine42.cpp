@@ -37,6 +37,8 @@ std::string PlayerName = "Player";
 // NPC Values
 NPC npc;
 std::vector<std::string> dialogue;
+bool notSpoken = true;
+int ns = 0;
 const int NPC_START_HEALTH = 999;
 
 // Monster Values
@@ -44,7 +46,7 @@ std::vector<Monster> monsters;
 std::vector<std::string> drops;
 BattleObject monsterStatsObj;
 const int MOB_START_HEALTH = 70;
-const int MOB_START_ATTACK = 2;
+int MobStartAttack = 2;
 const int MOB_START_DEFENSE = 2;
 
 //Weapon Values
@@ -423,9 +425,9 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 			// Add Two Drops
 			drops.push_back("Sword of Doom");
 			drops.push_back("Golden Spork");
-
+			MobStartAttack += 7;
 			// Instansiate Monster Object with X & Y Positions
-			monsters.push_back(Monster(std::make_pair(X, Y), "Monster", drops, MOB_START_HEALTH, MOB_START_ATTACK, MOB_START_DEFENSE));
+			monsters.push_back(Monster(std::make_pair(X, Y), "Monster", drops, MOB_START_HEALTH, MobStartAttack , MOB_START_DEFENSE));
 			break;
 
 		case DOOR:
@@ -472,6 +474,26 @@ bool Engine42::PlayerCollided()
 			player.setWeapon(weapons[i]);
 			weapons[i].setCoordinates(0,0);
 			return true;
+		}
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			if (player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() + 2))
+			{
+				notSpoken = true;
+			}
+			else if (player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j) && notSpoken)
+			{
+				npc.getDialogueSeg(ns);
+				ns++;
+				notSpoken = false;
+				if (ns > npc.getDialogue().size())
+				{ 
+					ns = 0;
+				}
+			}
 		}
 	}
 	return false;
