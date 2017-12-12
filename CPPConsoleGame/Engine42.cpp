@@ -18,6 +18,7 @@
 // BUG LOCATION:
 // MovePlayer()
 
+bool IS_GAME_STARTED = false;
 bool ENABLE_DEBUGGER = false;
 
 int Engine42::IDCounter = 0;
@@ -260,16 +261,16 @@ void Engine42::OpenMenu()
 	while (MenuTriggered)
 	{
 		// Controls
-		GotoXY(30, 27);  std::cout << " Start Game";
+		if (!IS_GAME_STARTED)
+		{ GotoXY(30, 27);  std::cout << " Start Game"; }
+		else { GotoXY(30, 27);  std::cout << " Continue"; }
+
+
 		GotoXY(30, 28);  std::cout << " Controls";
-		if (ENABLE_DEBUGGER)
-		{
-			GotoXY(30, 29);  std::cout << " Debug: ON";
-		}
-		else
-		{
-			GotoXY(30, 29);  std::cout << " Debug: OFF";
-		}
+
+		if (ENABLE_DEBUGGER){ GotoXY(30, 29);  std::cout << " Debug: ON"; }
+		else { GotoXY(30, 29);  std::cout << " Debug: OFF"; }
+
 		GotoXY(30, 30);  std::cout << " Exit";
 
 		system("PAUSE>NUL"); // Don't print last character
@@ -305,6 +306,7 @@ void Engine42::OpenMenu()
 					GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
 					RedrawMap();
 
+					IS_GAME_STARTED = true;
 					MenuTriggered = false; // Disable Menu & Start/Continue Game
 					break;
 				case 1:
@@ -500,8 +502,6 @@ void Engine42::DetectPlayerCollision()
 			weapons[i].setCoordinates(0, 0);
 		}
 	}
-
-
 
 	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
 	{
