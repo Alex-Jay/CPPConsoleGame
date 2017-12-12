@@ -6,8 +6,6 @@ class BattleEvent
 {
 public:
 	BattleEvent();
-	void EventLoop(Player player, Monster enemy);
-	void gotoXY(int x, int y);
-	~BattleEvent();
+	void EventLoop(Player &player, Monster &enemy);
 };
 

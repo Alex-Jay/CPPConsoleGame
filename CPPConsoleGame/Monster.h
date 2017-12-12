@@ -30,7 +30,7 @@ public:
 	void setWeapon(Weapon n);
 	bool checkIsDead();
 	bool getIsDead();
-	void setIsDead();
+	void setIsDead(bool);
 	void setHealth(int health);
 	string toString();
 	~Monster();

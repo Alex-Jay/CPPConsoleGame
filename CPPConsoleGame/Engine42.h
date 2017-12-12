@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <Windows.h>
 #include "BattleObject.h"
 #include "Monster.h"
 
@@ -28,8 +27,6 @@ public:
 	bool MapLoaded;
 	bool objectsIntialised;
 	bool IsRunning;
-	HANDLE console;
-	COORD CursorPosition;
 
 	MapArray Map; // Using Outer Vectors index as Y-Position and using Inner Vectors index of as X-Poition, Inner Vector Contents Contain Character at Position.
 
@@ -47,13 +44,10 @@ public:
 	void MovePlayer(enum Direction, int MovementSpeed = 80);
 	void Debug();
 	void ListenKeyInput();
-	void GotoXY(int, int);
-	void GotoXY(int, int, std::string);
 	void OpenMenu();
 	void ProcessCharacter(char, int, int);
 	void LoadMapFile(const std::string);
 	void LoadDrawMapFile(const std::string);
-	bool PlayerCollided();
 	void DetectPlayerCollision();
 	void LoadBattleScreen(Monster enemy);
 	void ClearMenu();

@@ -94,9 +94,9 @@ void Player::setWeapon(Weapon n)
 {
 	BattleObject::setWeapon(n);
 }
-void Player::setIsDead()
+void Player::setIsDead(bool state)
 {
-	BattleObject::setIsDead();
+	BattleObject::setIsDead(state);
 }
 bool Player::getIsDead()
 {

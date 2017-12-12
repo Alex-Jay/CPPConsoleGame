@@ -146,8 +146,10 @@
     <ClInclude Include="BattleEvent.h" />
     <ClInclude Include="BattleMenu.h" />
     <ClInclude Include="BattleObject.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Engine42.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameUtility.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="NPC.h" />
@@ -167,6 +169,7 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="GameUtility.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
