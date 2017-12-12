@@ -22,22 +22,25 @@ class Engine42
 private:
 	int m_id;
 	std::string m_MapName;
+	Engine42* m_engine;
 public:
 	static int IDCounter;
 	bool MapLoaded;
 	bool objectsIntialised;
 	bool IsRunning;
 
-	MapArray Map; // Using Outer Vectors index as Y-Position and using Inner Vectors index of as X-Poition, Inner Vector Contents Contain Character at Position.
+	MapArray Map; // Using Outer Vectors index as Y-Position and using Inner Vectors index of as X-Poition, Inner Vector Contents Contain Character at Position. Y -> X -> Char
 
 	Engine42();
 	int GetID() { return m_id; }
 	void InitializeMap(const std::string);
 	void SetConsoleSize(int, int);
+	MapArray GetMap() { return Map; }
 	void Update();
-	void Run();
+	void Run(Engine42*);
 	std::string GetMapName() { return m_MapName; }
 	virtual void Draw();
+	Engine42* GetEnginePtr() { return m_engine; };
 	void DrawMap();
 	void RedrawMap();
 	void ClearScreen();
@@ -50,6 +53,5 @@ public:
 	void LoadDrawMapFile(const std::string);
 	void DetectPlayerCollision();
 	void LoadBattleScreen(Monster enemy);
-	void ClearMenu();
 };
 #endif

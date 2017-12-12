@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <iostream>
 #include <string>
+#include <math.h>
 
 using namespace GameUtility;
 
@@ -12,8 +13,9 @@ BattleEvent::BattleEvent()
 {
 }
 
-void BattleEvent::EventLoop(Player &player, Monster &enemy)
+void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42* engine)
 {
+	int tempEnemyXPos = 0, tempEnemyYPos = 0;
 	int menu_item = 0, x = 26;
 	bool running = true;
 	bool eDead = false;
@@ -26,7 +28,6 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy)
 		GotoXY(20, 26);  cout << "1) Attack!";
 		GotoXY(20, 27);  cout << "2) Defend!";
 		GotoXY(20, 28);  cout << "3) Run!";
-
 
 		system("pause>nul"); // the >nul bit causes it the print no message
 
@@ -55,7 +56,21 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy)
 			{
 			case ATTACK: // Attack Case
 				GotoXY(0, 30);
-				enemy.decreaseHealth(player.Attack(enemy.getDefence()));
+				tempEnemyXPos = enemy.getXPos(), tempEnemyYPos = enemy.getYPos();
+
+				//if (enemy.getHealth() > 0) // If Enemy is Still Alive
+				if(!enemy.checkIsDead())
+				{
+					enemy.decreaseHealth(player.Attack(enemy.getDefence()));
+				}
+				else // If Enemy is Dead
+				{
+					enemy.setIsDead(true);
+					(*engine).GetMap().at(player.getYPos()).at(player.getXPos()) = ' ';
+					player.setCoordinates(tempEnemyXPos, tempEnemyYPos - 2); // Move The Player Away From The Enemy [ Win Condition ]
+
+					running = false;
+				}
 				break;
 
 			case DEFEND: // Defend Case
@@ -64,7 +79,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy)
 				break;
 
 			case RUN: // Run Case
-				int tempEnemyXPos = enemy.getXPos(), tempEnemyYPos = enemy.getYPos();
+				tempEnemyXPos = enemy.getXPos(), tempEnemyYPos = enemy.getYPos();
 
 				GotoXY(0, 32);
 				cout << "You Ran!";

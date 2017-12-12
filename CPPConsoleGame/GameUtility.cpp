@@ -20,4 +20,15 @@ namespace GameUtility
 		GotoXY(X, Y);
 		std::cout << text;
 	}
+
+	void GameUtility::ClearMenu(int mapHeight, int clearLength)
+	{
+		int MENU_YPOS = mapHeight; // Set Top Of Menu Below The Map
+
+		for (int i = 0; i < MENU_HEIGHT; i++)
+		{
+			GotoXY(0, MENU_YPOS);  std::cout << std::string(clearLength, ' ');
+			MENU_YPOS++;
+		}
+	}
 }

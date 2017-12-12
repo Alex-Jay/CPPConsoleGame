@@ -12,6 +12,13 @@
 #include "Monster.h"
 #include "BattleEvent.h"
 
+/*
+	TODO: 
+	1] Fix Bug with Player Getting Stuck in Fight Loop on Win Condition
+	2] Remove the Monster Char from Map Array on Win Condition
+	3] 
+*/
+
 using namespace GameUtility;
 
 bool IS_GAME_STARTED = false;
@@ -122,8 +129,11 @@ void Engine42::Update()
 }
 
 // Game Entry Point
-void Engine42::Run()
+void Engine42::Run(Engine42* engine)
 {
+	// Initialize Engine Ptr
+	m_engine = engine;
+
 	// Pre-Initialise Spawn Location if Not Found
 	player.setCoordinates(4, 6);
 
@@ -296,7 +306,8 @@ void Engine42::OpenMenu()
 					//GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
 					//GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
 
-					ClearMenu();
+					//      Map Last Y Pos   Map.l
+					ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 
 					RedrawMap();
 
@@ -328,9 +339,9 @@ void Engine42::LoadBattleScreen(Monster enemy)
 
 	LoadDrawMapFile("BattleScreen.txt"); // ONLY Draw BattleScreen.txt
 
-	current.EventLoop(player, enemy); // Start Battle Loop
+	current.EventLoop(player, enemy, GetEnginePtr()); // Start Battle Loop
 
-	ClearMenu(); // Clear Menu After Battle
+	ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 
 	RedrawMap(); // Redraw Loaded Map
 }
@@ -438,7 +449,7 @@ void Engine42::DetectPlayerCollision()
 {
 	for (Monster& monster : monsters)
 	{
-		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead())
+		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead()) // If Player is Stood on a Monster
 		{
 			LoadBattleScreen(monster);
 		}
@@ -446,15 +457,15 @@ void Engine42::DetectPlayerCollision()
 
 	for (Weapon& weapon : weapons)
 	{
-		if (player.GetCoordinates() == std::make_pair(weapon.getX(), weapon.getY()))
+		if (player.GetCoordinates() == std::make_pair(weapon.getX(), weapon.getY())) // If Player is Stood on a Weapon
 		{
-			GotoXY(0, 29); weapon.pickedUp();
+			GotoXY(0, 29); weapon.pickedUp(); // Display Pickup Text
 			player.setWeapon(weapon);
 			weapon.setCoordinates(0, 0);
 
 			Sleep(DISPLAY_TIME); // Display Pickup for DISPLAY_TIME seconds
 
-			ClearMenu(); // Clear Menu
+			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 		}
 	}
 
@@ -472,6 +483,7 @@ void Engine42::DetectPlayerCollision()
 	//	}
 	//}
 
+	// NPC Detecion
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 2; j++)
@@ -577,16 +589,5 @@ void Engine42::LoadDrawMapFile(const std::string FILENAME)
 		}
 
 		file.close(); // Close File
-	}
-}
-
-void Engine42::ClearMenu()
-{
-	int MENU_YPOS = 27;
-
-	for (int i = 0; i < MENU_HEIGHT; i++)
-	{
-		GotoXY(0, MENU_YPOS);  std::cout << std::string(Map.at(0).size(), ' ');
-		MENU_YPOS++;
 	}
 }
