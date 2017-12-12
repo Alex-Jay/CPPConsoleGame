@@ -7,11 +7,11 @@ BattleObject::BattleObject()
 
 }
 
-BattleObject::BattleObject(int health, string name, int attack, int defence) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false)
+BattleObject::BattleObject(int health, string name, int attack, int defence) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false), m_isDead(false)
 {
 }
 
-BattleObject::BattleObject(int health, string name, int attack, int defence, Weapon weapon) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false), m_weapon(weapon)
+BattleObject::BattleObject(int health, string name, int attack, int defence, Weapon weapon) : m_health(health), m_name(name), m_attack(attack), m_defence(defence), m_defend(false), m_weapon(weapon), m_isDead(false)
 {
 
 }
@@ -43,13 +43,13 @@ bool BattleObject::isDefend()
 }
 void BattleObject::decreaseHealth(int damage) // set health
 {
-	cout << m_name << " has taken " << to_string(damage) << ", ";
+	cout << m_name << " has taken " << to_string(damage) << " damage! ";
 	m_health -= damage;
 	if (m_health < 1)
 	{
 		m_health = 0;
 	}
-	cout << m_name << " has " << to_string(m_health) << " remaining!\n";
+	cout << m_name << " has " << to_string(m_health) << " HP remaining!\n";
 	checkIsDead();
 }
 bool BattleObject::checkIsDead()
@@ -96,6 +96,15 @@ void BattleObject::Defend()
 void BattleObject::setWeapon(Weapon n)
 {
 	m_weapon = n;
+}
+void BattleObject::setIsDead()
+{
+	m_isDead = true;
+}
+bool BattleObject::getIsDead()
+{
+	return m_isDead;
+	cout << "true";
 }
 string BattleObject::toString()
 {

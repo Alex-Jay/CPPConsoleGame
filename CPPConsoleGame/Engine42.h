@@ -21,6 +21,7 @@ private:
 public:
 	static int IDCounter;
 	bool MapLoaded;
+	bool objectsIntialised;
 	bool IsRunning;
 	HANDLE console;
 	COORD CursorPosition;
@@ -48,6 +49,6 @@ public:
 	void LoadMapFile(const std::string);
 	void LoadDrawMapFile(const std::string);
 	bool PlayerCollided();
-	void LoadBattleScreen(BattleObject player, BattleObject enemy);
+	void LoadBattleScreen(BattleObject &player, BattleObject &enemy);
 };
 #endif

@@ -3,12 +3,10 @@
 
 
 Weapon::Weapon() : m_id(0), m_name("Nothing"), m_attack(0), m_defence(0)
-{
-	cout << "Nothing equiped!!" << endl;
+{	
 }
 Weapon::Weapon(string name, int attack, int defence) : m_id(1), m_name(name), m_attack(attack), m_defence(defence), m_x(0), m_y(0)
 {
-	cout << m_name << " equiped!!" << endl;
 }
 
 int Weapon::getAttack()
@@ -37,7 +35,7 @@ string Weapon::toString()
 }
 void Weapon::pickedUp()
 {
-	cout << "You found the " << m_name << "\n + " << m_attack << " atk, + " << m_defence << " def!" << endl;
+	cout << "You found the " << m_name << "; + " << m_attack << " atk, + " << m_defence << " def!" << endl;
 }
 void Weapon::setCoordinates(int x, int y)
 {

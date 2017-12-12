@@ -12,6 +12,7 @@ private:
 	string m_name;
 	bool m_defend;
 	Weapon m_weapon;
+	bool m_isDead;
 
 
 public:
@@ -31,6 +32,8 @@ public:
 	void setWeapon(Weapon n);
 	bool checkIsDead();
 	void gainHealth(int heal);
+	bool getIsDead();
+	void setIsDead();
 	string toString();
 	~BattleObject();
 };

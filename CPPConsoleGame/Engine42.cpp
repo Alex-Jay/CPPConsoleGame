@@ -98,7 +98,7 @@ void Engine42::InitializeMap(const std::string FILENAME)
 
 	// Load The Map
 	LoadMapFile(FILENAME);
-
+	objectsIntialised = true;
 	//Draw Map Layout
 	DrawMap();
 
@@ -328,7 +328,7 @@ void Engine42::OpenMenu()
 	}
 }
 
-void Engine42::LoadBattleScreen(BattleObject player, BattleObject enemy)
+void Engine42::LoadBattleScreen(BattleObject &player, BattleObject &enemy)
 {
 	BattleEvent current = BattleEvent(player, enemy);
 	current.EventLoop();
@@ -348,8 +348,10 @@ void Engine42::Debug()
 	//std::cout << "Health: " << "\tArmor: " << "\tQuest Name: ";
 
 	GotoXY(0, 25); std::cout << "Player X: " << player.getXPos() << "\tPlayer Y: " << player.getYPos();
+	//GotoXY(0, 26); std::cout << "NPC X: " << player.getBattleOb().toString() << "\tNPC Y: " << npc.getYPos();
 
 	GotoXY(0, 26); std::cout << "NPC X: " << npc.getXPos() << "\tNPC Y: " << npc.getYPos();
+
 }
 
 void Engine42::ListenKeyInput()
@@ -401,6 +403,7 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 	{
 		switch (c)
 		{
+
 		case PLAYER:
 			playerStatsObj = BattleObject(PLAYER_START_HEALTH, PlayerName, PLAYER_START_ATTACK, PLAYER_START_DEFENSE); // Create BattleObject / Player Stats for battles
 
@@ -449,10 +452,10 @@ bool Engine42::PlayerCollided()
 {
 	for (auto& monsterCoord : monsters)
 	{
-		if (player.GetCoordinates() == std::make_pair(monsterCoord.getXPos(), monsterCoord.getYPos()))
+		if (player.GetCoordinates() == std::make_pair(monsterCoord.getXPos(), monsterCoord.getYPos()) && monsterCoord.getBattleOb().getIsDead() == false)
 		{
 			LoadBattleScreen(player.getBattleOb(), monsterCoord.getBattleOb());
-			monsterCoord.setCoordinates(0,0);
+			monsterCoord.getBattleOb().setIsDead();
 			return true;
 		}
 	}
@@ -465,7 +468,7 @@ bool Engine42::PlayerCollided()
 	{
 		if (player.GetCoordinates() == std::make_pair(weapons[i].getX(), weapons[i].getY()))
 		{
-			weapons[i].pickedUp();
+			GotoXY(0, 30); weapons[i].pickedUp();
 			player.getBattleOb().setWeapon(weapons[i]);
 			weapons[i].setCoordinates(0,0);
 			return true;
@@ -498,9 +501,8 @@ void Engine42::LoadMapFile(const std::string FILENAME)
 				// Foreach character on line
 				for (char c : line)
 				{
-
-					ProcessCharacter(c, X, Y);
-
+						ProcessCharacter(c, X, Y);
+					
 					X++; // Increment X Position
 
 					// Push Current Character into 'XPos' vector

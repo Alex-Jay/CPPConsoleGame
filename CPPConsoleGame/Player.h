@@ -21,7 +21,7 @@ public:
 	string getName();
 	vector<string> getInventory();
 	string getItem(int num);
-	BattleObject getBattleOb();
+	BattleObject* getBattleOb();
 	string toString();
 
 	~Player();

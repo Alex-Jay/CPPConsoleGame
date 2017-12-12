@@ -34,9 +34,9 @@ string Player::toString()
 	return  m_name + " " + "'inventory:\n " + items  + " Position at: " + GameObject::toString() + m_battle.toString();
 }
 
-BattleObject Player::getBattleOb()
+BattleObject* Player::getBattleOb()
 {
-	return m_battle;
+	return &m_battle;
 }
 
 Player::~Player()

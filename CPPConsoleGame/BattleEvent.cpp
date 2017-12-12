@@ -12,18 +12,18 @@ HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
 COORD CursorPosition; // used for goto
 void BattleEvent::EventLoop()
 {
-	int menu_item = 0, x = 15;
+	int menu_item = 0, x = 26;
 	bool running = true;
 	bool eDead = false;
 	int count = 0;
-	gotoXY(18, 5); cout << "Battle";
-	gotoXY(18, 15); cout << "->";
+	gotoXY(10, 26); cout << "Battle";
+	gotoXY(18, 26); cout << "->";
 
 	while (running)
 	{
-		gotoXY(20, 15);  cout << "1) Attack!";
-		gotoXY(20, 16);  cout << "2) Defend!";
-		gotoXY(20, 17);  cout << "3) Run!";
+		gotoXY(20, 26);  cout << "1) Attack!";
+		gotoXY(20, 27);  cout << "2) Defend!";
+		gotoXY(20, 28);  cout << "3) Run!";
 
 
 		system("pause>nul"); // the >nul bit causes it the print no message
@@ -53,20 +53,20 @@ void BattleEvent::EventLoop()
 
 			case 0: {
 
-				gotoXY(10, 21);
+				gotoXY(0, 30);
 				m_player.Attack(m_enemy);
 				break;
 			}
 
 
 			case 1: {
-				gotoXY(10, 21);
+				gotoXY(0, 28);
 				m_player.Defend();
 				break;
 			}
 
 			case 2: {
-				gotoXY(10, 21);
+				gotoXY(0, 32);
 				cout << "You Ran!";
 				running = false;
 				break;
@@ -77,13 +77,17 @@ void BattleEvent::EventLoop()
 
 			if (m_enemy.getHealth() != 0)
 			{
-				gotoXY(10, 22);
+				gotoXY(0, 31);
 				m_enemy.Attack(m_player);
-				gotoXY(10, 23);
-				cout << m_enemy.getAttack();
 			}
 			else {
 				running = false;
+				gotoXY(0, 26);  std::cout << std::string(60, ' ');
+				gotoXY(0, 27);  std::cout << std::string(60, ' ');
+				gotoXY(0, 28);  std::cout << std::string(60, ' ');
+				gotoXY(0, 29);  std::cout << std::string(60, ' ');
+				gotoXY(0, 30);  std::cout << std::string(60, ' ');
+				gotoXY(0, 31);  std::cout << std::string(60, ' ');
 			}
 		}
 
