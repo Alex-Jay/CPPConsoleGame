@@ -449,7 +449,7 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 }
 bool Engine42::PlayerCollided()
 {
-	for (auto& monsterCoord : monsters)
+	for (auto monsterCoord : monsters)
 	{
 		if (player.GetCoordinates() == std::make_pair(monsterCoord.getXPos(), monsterCoord.getYPos()) && !monsterCoord.getIsDead())
 		{

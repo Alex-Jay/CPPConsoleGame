@@ -9,7 +9,6 @@ class BattleObject
 {
 private:
 	int m_health, m_attack, m_defence;
-	string m_name;
 	bool m_defend;
 	Weapon m_weapon;
 	bool m_isDead;
@@ -17,10 +16,9 @@ private:
 
 public:
 	BattleObject();
-	BattleObject(int health, string name, int attack, int defence, Weapon weapon);
-	BattleObject(int health, string name, int attack, int defence);
+	BattleObject(int health, int attack, int defence, Weapon weapon);
+	BattleObject(int health, int attack, int defence);
 
-	string getName();
 	Weapon getWeapon();
 	int getHealth();
 	int getAttack();

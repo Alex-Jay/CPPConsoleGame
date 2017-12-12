@@ -5,16 +5,17 @@
 #include <vector>
 using namespace std;
 class Monster :
-	public GameObject
+	public GameObject,
+	public BattleObject
 {
 private :
 	string m_name;
 	vector<string> m_drops;
 	BattleObject m_battle;
 public:
-	Monster(std::pair<int, int> coordinates, string name, vector<string> drops, BattleObject battle);
+	Monster(std::pair<int, int> coordinates, string name, vector<string> drops, int health, int attack, int defence);
 	string getName();
-	BattleObject getBattleOb();
+	BattleObject* getBattleOb();
 	vector<string> getDrops();
 	string toString();
 	~Monster();

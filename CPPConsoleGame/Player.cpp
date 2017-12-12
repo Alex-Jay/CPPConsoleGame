@@ -5,7 +5,7 @@
 
 Player::Player() {}
 
-Player::Player(std::pair<int, int> coordinates, string name, BattleObject x) : GameObject(coordinates), m_name(""), m_battle(x)
+Player::Player(std::pair<int, int> coordinates, string name, int health, int attack, int defence) : GameObject(coordinates), BattleObject(health, attack, defence), m_name("")
 {
 }
 

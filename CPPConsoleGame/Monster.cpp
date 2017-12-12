@@ -2,7 +2,7 @@
 #include "Monster.h"
 
 
-Monster::Monster(std::pair<int, int> coordinates, string name, vector<string> drops, BattleObject battle) : GameObject(coordinates), m_name(name), m_drops(drops), m_battle(battle)
+Monster::Monster(std::pair<int, int> coordinates, string name, vector<string> drops, int health, int attack, int defence): GameObject(coordinates), BattleObject(health, attack, defence), m_name(name), m_drops(drops)
 {
 
 
@@ -17,9 +17,9 @@ vector<string> Monster::getDrops()
 	return m_drops;
 }
 
-BattleObject Monster::getBattleOb()
+BattleObject* Monster::getBattleOb()
 {
-	return m_battle;
+	return &m_battle;
 }
 string Monster::toString()
 {

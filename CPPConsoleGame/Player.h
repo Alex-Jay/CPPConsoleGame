@@ -5,7 +5,8 @@
 #include <vector>
 using namespace std;
 class Player :
-	public GameObject
+	public GameObject,
+	public BattleObject
 {
 private:
 
@@ -14,9 +15,8 @@ private:
 	BattleObject m_battle;
 public:
 	Player();
-	Player(std::pair<int, int>, string, BattleObject);
+	Player(std::pair<int, int>, string, int health, int attack, int defence);
 	void SetCooridnates(int, int);
-	void MoveLeft();
 	std::pair<int, int> GetCoordinates() { return std::make_pair(GameObject::getXPos(), GameObject::getYPos()); }
 	string getName();
 	vector<string> getInventory();

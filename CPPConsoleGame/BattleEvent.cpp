@@ -5,12 +5,13 @@
 #include <string>
 #include <windows.h>
 
-BattleEvent::BattleEvent(BattleObject &player, BattleObject &enemy) : m_player(player), m_enemy(enemy)
+
+BattleEvent::BattleEvent() 
 {
 }
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // used for goto
 COORD CursorPosition; // used for goto
-void BattleEvent::EventLoop()
+void BattleEvent::EventLoop(Player player, Monster enemy)
 {
 	int menu_item = 0, x = 26;
 	bool running = true;
@@ -28,7 +29,7 @@ void BattleEvent::EventLoop()
 
 		system("pause>nul"); // the >nul bit causes it the print no message
 
-		if (GetAsyncKeyState(VK_DOWN) && x != 17) //down button pressed
+		if (GetAsyncKeyState(VK_DOWN) && x != 28) //down button pressed
 		{
 			gotoXY(18, x); cout << "  ";
 			x++;
@@ -38,7 +39,7 @@ void BattleEvent::EventLoop()
 
 		}
 
-		if (GetAsyncKeyState(VK_UP) && x != 15) //up button pressed
+		if (GetAsyncKeyState(VK_UP) && x != 26) //up button pressed
 		{
 			gotoXY(18, x); cout << "  ";
 			x--;
