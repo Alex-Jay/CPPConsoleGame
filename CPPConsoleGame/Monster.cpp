@@ -89,9 +89,9 @@ void Monster::setWeapon(Weapon n)
 {
 	BattleObject::setWeapon( n);
 }
-void Monster::setIsDead()
+void Monster::setIsDead(bool state)
 {
-	BattleObject::setIsDead();
+	BattleObject::setIsDead(state);
 }
 bool Monster::getIsDead()
 {

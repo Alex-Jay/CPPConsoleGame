@@ -80,14 +80,13 @@ void BattleObject::setWeapon(Weapon n)
 {
 	m_weapon = n;
 }
-void BattleObject::setIsDead()
+void BattleObject::setIsDead(bool state)
 {
-	m_isDead = true;
+	m_isDead = state;
 }
 bool BattleObject::getIsDead()
 {
 	return m_isDead;
-	cout << "true";
 }
 string BattleObject::toString()
 {

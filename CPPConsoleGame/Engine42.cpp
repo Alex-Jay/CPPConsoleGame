@@ -1,32 +1,30 @@
 #include "stdafx.h"
 #include "Engine42.h"
+#include "Constants.h"
+#include "GameUtility.h"
 #include <fstream>
 #include <conio.h>
 #include <iostream>
 #include <string>
-#include <windows.h>
 #include "Menu.h"
 #include "Player.h"
 #include "NPC.h"
 #include "Monster.h"
 #include "BattleEvent.h"
 
-// TODO:
-// FIX BUG
-// Player Y Position increments in (Y + 10) and then suddenly increments normally in (Y + 1)
-//
-// BUG LOCATION:
-// MovePlayer()
+/*
+	TODO: 
+	1] Fix Bug with Player Getting Stuck in Fight Loop on Win Condition
+	2] Remove the Monster Char from Map Array on Win Condition
+	3] 
+*/
+
+using namespace GameUtility;
 
 bool IS_GAME_STARTED = false;
 bool ENABLE_DEBUGGER = false;
-const int MENU_HEIGHT = 10;
 
 int Engine42::IDCounter = 0;
-const int CONSOLE_SIZE[] = { 500, 625 };
-const int PLAYER_START_HEALTH = 100;
-const int PLAYER_START_ATTACK = 5;
-const int PLAYER_START_DEFENSE = 4;
 
 bool MenuTriggered = true;
 bool FirstCycle = true;
@@ -41,15 +39,12 @@ NPC npc;
 std::vector<std::string> dialogue;
 bool notSpoken = true;
 int ns = 0;
-const int NPC_START_HEALTH = 999;
 
 // Monster Values
 std::vector<Monster> monsters;
 std::vector<std::string> drops;
 BattleObject monsterStatsObj;
-const int MOB_START_HEALTH = 70;
 int MobStartAttack = 2;
-const int MOB_START_DEFENSE = 2;
 
 //Weapon Values
 Weapon weapons[2]; // Used an array
@@ -67,7 +62,7 @@ Point2D CollectibleCoordinates;
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
 	// Initialize Handle For using GotoXY()
-	console = GetStdHandle(STD_OUTPUT_HANDLE);
+	//console = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
 void Engine42::SetConsoleSize(int height, int width)
@@ -134,8 +129,11 @@ void Engine42::Update()
 }
 
 // Game Entry Point
-void Engine42::Run()
+void Engine42::Run(Engine42* engine)
 {
+	// Initialize Engine Ptr
+	m_engine = engine;
+
 	// Pre-Initialise Spawn Location if Not Found
 	player.setCoordinates(4, 6);
 
@@ -308,7 +306,8 @@ void Engine42::OpenMenu()
 					//GotoXY(0, 29);  std::cout << std::string(Map.at(0).size(), ' ');
 					//GotoXY(0, 30);  std::cout << std::string(Map.at(0).size(), ' ');
 
-					ClearMenu();
+					//      Map Last Y Pos   Map.l
+					ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 
 					RedrawMap();
 
@@ -340,9 +339,9 @@ void Engine42::LoadBattleScreen(Monster enemy)
 
 	LoadDrawMapFile("BattleScreen.txt"); // ONLY Draw BattleScreen.txt
 
-	current.EventLoop(player, enemy); // Start Battle Loop
+	current.EventLoop(player, enemy, GetEnginePtr()); // Start Battle Loop
 
-	ClearMenu(); // Clear Menu After Battle
+	ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 
 	RedrawMap(); // Redraw Loaded Map
 }
@@ -391,23 +390,6 @@ void Engine42::ListenKeyInput()
 	{
 		OpenMenu();
 	}
-}
-
-void Engine42::GotoXY(int X, int Y)
-{
-	// Author: whitenite1
-	// Source : http://www.cplusplus.com/forum/general/51271/
-	CursorPosition.X = X;
-	CursorPosition.Y = Y;
-	SetConsoleCursorPosition(console, CursorPosition);
-}
-
-void Engine42::GotoXY(int X, int Y, std::string text)
-{
-	CursorPosition.X = X;
-	CursorPosition.Y = Y;
-	SetConsoleCursorPosition(console, CursorPosition);
-	std::cout << text;
 }
 
 void Engine42::ProcessCharacter(char c, int X, int Y)
@@ -520,22 +502,41 @@ void Engine42::DetectPlayerCollision()
 {
 	for (Monster& monster : monsters)
 	{
-		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead())
+		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead()) // If Player is Stood on a Monster
 		{
 			LoadBattleScreen(monster);
 		}
 	}
 
-	for (int i = 0; i < sizeof(weapons); i++)
+	for (Weapon& weapon : weapons)
 	{
-		if (player.GetCoordinates() == std::make_pair(weapons[i].getX(), weapons[i].getY()))
+		if (player.GetCoordinates() == std::make_pair(weapon.getX(), weapon.getY())) // If Player is Stood on a Weapon
 		{
-			GotoXY(0, 30); weapons[i].pickedUp();
-			player.setWeapon(weapons[i]);
-			weapons[i].setCoordinates(0, 0);
+			GotoXY(0, 29); weapon.pickedUp(); // Display Pickup Text
+			player.setWeapon(weapon);
+			weapon.setCoordinates(0, 0);
+
+			Sleep(DISPLAY_TIME); // Display Pickup for DISPLAY_TIME seconds
+
+			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 		}
 	}
 
+	//for (int i = 0; i < sizeof(weapons); i++)
+	//{
+	//	if (player.GetCoordinates() == std::make_pair(weapons[i].getX(), weapons[i].getY()))
+	//	{
+	//		GotoXY(0, 29); weapons[i].pickedUp();
+	//		player.setWeapon(weapons[i]);
+	//		weapons[i].setCoordinates(0, 0);
+
+	//		Sleep(DISPLAY_TIME); // Display Pickup for DISPLAY_TIME seconds
+
+	//		ClearMenu(); // Clear Menu
+	//	}
+	//}
+
+	// NPC Detecion
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 2; j++)
@@ -557,10 +558,11 @@ void Engine42::DetectPlayerCollision()
 			}
 		}
 	}
+
 	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
 	{
-		LoadMapFile("Map2.txt");
-		RedrawMap();
+		LoadMapFile("Map2.txt"); // Load Map When Walking Through A Door
+		RedrawMap(); // Redraw the map
 	}
 
 
@@ -640,16 +642,5 @@ void Engine42::LoadDrawMapFile(const std::string FILENAME)
 		}
 
 		file.close(); // Close File
-	}
-}
-
-void Engine42::ClearMenu()
-{
-	int MENU_YPOS = 27;
-
-	for (int i = 0; i < MENU_HEIGHT; i++)
-	{
-		GotoXY(0, MENU_YPOS);  std::cout << std::string(Map.at(0).size(), ' ');
-		MENU_YPOS++;
 	}
 }
