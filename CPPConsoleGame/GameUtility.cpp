@@ -31,4 +31,14 @@ namespace GameUtility
 			MENU_YPOS++;
 		}
 	}
+
+	void GameUtility::DisplayDialogue(std::string text)
+	{
+		for (int i = 0; i < text.size(); i++)
+		{
+			std::cout << text.at(i);
+			Sleep(DIALOGUE_SPEED_DELAY);
+		}
+		std::cout << std::endl;
+	}
 }

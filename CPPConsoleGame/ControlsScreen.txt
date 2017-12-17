@@ -1,13 +1,13 @@
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+﻿XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X                                                                        X
-X       Main Menu                                                        X
+X       Main Menu                                       Use              X
 X                                                                        X
-X     =============                                                      X
-X     | __ __  __ |                                                      X
-X     ||_ |__ |   |            Move Up                                   X
-X     ||__ __||__ |                                                      X
-X     |           |         =============                                X
-X     =============         |     ^     |                                X
+X     =============                             ====================     X
+X     | __ __  __ |                             |                  |     X
+X     ||_ |__ |   |            Move Up          |    Enter         |     X
+X     ||__ __||__ |                             |    <---          |     X
+X     |           |         =============       |                  |     X
+X     =============         |     ^     |       ====================     X
 X                           |   / | \   |                                X
 X                           |  /  |  \  |                                X
 X                           |     |     |                                X

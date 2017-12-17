@@ -13,7 +13,7 @@ BattleEvent::BattleEvent()
 {
 }
 
-void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42* engine)
+void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 {
 	int tempEnemyXPos = 0, tempEnemyYPos = 0;
 	int menu_item = 0, x = 26;
@@ -56,21 +56,25 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42* engine)
 			{
 			case ATTACK: // Attack Case
 				GotoXY(0, 30);
-				tempEnemyXPos = enemy.getXPos(), tempEnemyYPos = enemy.getYPos();
 
-				//if (enemy.getHealth() > 0) // If Enemy is Still Alive
-				if(!enemy.checkIsDead())
+				if(enemy.getHealth() > 0)
 				{
 					enemy.decreaseHealth(player.Attack(enemy.getDefence()));
 				}
-				else // If Enemy is Dead
+				else
 				{
 					enemy.setIsDead(true);
-					(*engine).GetMap().at(player.getYPos()).at(player.getXPos()) = ' ';
-					player.setCoordinates(tempEnemyXPos, tempEnemyYPos - 2); // Move The Player Away From The Enemy [ Win Condition ]
-
+					//engine.ClearCharFromMap(player.getXPos(), player.getYPos(), 'B'); // Remove Monster Char from Where Player is Standing
 					running = false;
 				}
+				//else // If Enemy is Dead
+				//{
+				//	player.setCoordinates(tempEnemyXPos, tempEnemyYPos - 2); // Move The Player Away From The Enemy [ Win Condition ]
+				//	enemy.setIsDead(true);
+				//	engine.GetMap().at(player.getYPos()).at(player.getXPos()) = ' ';
+
+				//	running = false;
+				//}
 				break;
 
 			case DEFEND: // Defend Case
@@ -83,8 +87,6 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42* engine)
 
 				GotoXY(0, 32);
 				cout << "You Ran!";
-				
-				enemy.setIsDead(false);
 
 				Sleep(DISPLAY_TIME);
 
@@ -93,6 +95,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42* engine)
 
 				player.setCoordinates(tempEnemyXPos, tempEnemyYPos - 2); // Move The Player Away From The Enemy [ Run Condition ]
 
+				enemy.setIsDead(false);
 				running = false;
 				break;
 			}

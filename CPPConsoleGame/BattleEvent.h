@@ -8,6 +8,6 @@ class BattleEvent
 {
 public:
 	BattleEvent();
-	void EventLoop(Player &player, Monster &enemy, Engine42* engine);
+	void EventLoop(Player &player, Monster &enemy, Engine42 &engine);
 };
 
