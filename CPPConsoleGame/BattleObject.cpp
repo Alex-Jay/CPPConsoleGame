@@ -73,6 +73,7 @@ void BattleObject::Defend()
 	}
 	else
 	{
+		cout << "Player blocks in prepartion for a critical hit";
 		m_defend = true;
 	}
 }

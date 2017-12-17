@@ -398,7 +398,8 @@ void Engine42::RunDeathScheme()
 	ClearScreen();
 	GotoXY(20, 10); cout << "You Have Died.";
 	Sleep(DISPLAY_TIME);
-	RestartGame();
+	IsRunning = false;
+	//RestartGame();
 }
 
 void Engine42::CheckPlayerAliveState(Player &player)

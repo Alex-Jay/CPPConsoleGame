@@ -28,7 +28,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 		GotoXY(20, 26);  cout << "1) Attack!";
 		GotoXY(20, 27);  cout << "2) Defend!";
 		GotoXY(20, 28);  cout << "3) Run!";
-
+		
 		system("pause>nul"); // the >nul bit causes it the print no message
 
 		if (GetAsyncKeyState(VK_DOWN) && x != 28) //down button pressed
@@ -55,6 +55,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 			switch (menu_item) 
 			{
 			case ATTACK: // Attack Case
+				GotoXY(0, 30);  std::cout << std::string(100, ' ');
 				GotoXY(0, 30);
 
 				if(enemy.getHealth() > 0)
@@ -78,6 +79,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 				break;
 
 			case DEFEND: // Defend Case
+				GotoXY(0, 30);  std::cout << std::string(100, ' ');
 				GotoXY(0, 30);
 				player.Defend();
 				break;
@@ -109,12 +111,12 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 			{
 				enemy.setIsDead(true);
 				running = false;
-				GotoXY(0, 26);  std::cout << std::string(60, ' ');
-				GotoXY(0, 27);  std::cout << std::string(60, ' ');
-				GotoXY(0, 28);  std::cout << std::string(60, ' ');
-				GotoXY(0, 29);  std::cout << std::string(60, ' ');
-				GotoXY(0, 30);  std::cout << std::string(60, ' ');
-				GotoXY(0, 31);  std::cout << std::string(60, ' ');
+				GotoXY(0, 26);  std::cout << std::string(100, ' ');
+				GotoXY(0, 27);  std::cout << std::string(100, ' ');
+				GotoXY(0, 28);  std::cout << std::string(100, ' ');
+				GotoXY(0, 29);  std::cout << std::string(100, ' ');
+				GotoXY(0, 30);  std::cout << std::string(100, ' ');
+				GotoXY(0, 31);  std::cout << std::string(100, ' ');
 			}
 		}
 
