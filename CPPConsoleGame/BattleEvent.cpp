@@ -109,11 +109,14 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 				break;
 			}
 
-			if (enemy.getHealth() > 0)
-			{
 				GotoXY(0, 31);
 				player.decreaseHealth(enemy.Attack(player.getDefence(), player.isDefend()));
-			}
+				if (player.getHealth() < 1)
+				{
+					running = false;
+				}
+			
+
 		}
 
 		GotoXY(20, 23);
