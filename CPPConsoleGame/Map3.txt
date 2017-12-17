@@ -6,7 +6,7 @@ X                                                                        X
 X                                                                        X
 X                                                                        X
 X                                                                        X
-X                                                                        X
+X   ^                                                                    X
 X                              M     X                                   X
 X                                    X                                   X
 X                                    X                                   X
@@ -20,5 +20,5 @@ X                         M                                            ^ X
 X                                                                        X
 X                                             M                          X
 X                                                                       "X
-X *        O                                                             X
+X *        ^                                                             X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

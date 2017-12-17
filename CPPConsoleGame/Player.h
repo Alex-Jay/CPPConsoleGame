@@ -28,6 +28,7 @@ public:
 	int getDefence();
 	bool isDefend();
 	void decreaseHealth(int damage);
+	void increaseHealth(int regen);
 	int Attack(int defence);
 	void Defend();
 	void setWeapon(Weapon n);

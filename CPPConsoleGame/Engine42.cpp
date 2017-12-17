@@ -12,6 +12,7 @@
 #include "NPC.h"
 #include "Monster.h"
 #include "BattleEvent.h"
+#include "Potion.h"
 
 /*
 	TODO: 
@@ -58,7 +59,8 @@ Point2D DoorCoordinates;
 std::vector<Point2D> DropCoordinates;
 
 // Collectible Location
-Point2D CollectibleCoordinates;
+vector<Potion> potionList;
+
 
 Engine42::Engine42() : m_id(IDCounter++), IsRunning(false), MapLoaded(false)
 {
@@ -476,8 +478,7 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 
 		case COLLECTIBLE:
 			// Save Collectible Location
-			CollectibleCoordinates.X = X;
-			CollectibleCoordinates.Y = Y;
+			potionList.push_back(Potion(std::make_pair(X, Y)));
 			break;
 		}
 	}
@@ -509,7 +510,20 @@ void Engine42::DetectPlayerCollision()
 			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 		}
 	}
+	// Potion Pickup Collision Detection
+	for (Potion& potion : potionList)
+	{
+		if (GetDistance(player.GetCoordinates(), std::make_pair(potion.getXPos(), potion.getYPos())) == 0) // If Player is Stood on a Weapon
+		{
+			GotoXY(0, 29); potion.pickedUp(); // Display Pickup Text
+			player.increaseHealth(potion.getHealth());
+			potion.setCoordinates(0, 0);
 
+			Sleep(DISPLAY_TIME); // Display Pickup for DISPLAY_TIME seconds
+
+			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
+		}
+	}
 	// NPC Collision Detection
 
 			if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) > 2)
@@ -535,7 +549,7 @@ void Engine42::DetectPlayerCollision()
 			}
 
 	// Door Collision Detection
-	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
+	if (GetDistance(player.GetCoordinates(), std::make_pair(DoorCoordinates.X, DoorCoordinates.Y)) == 0)
 	{
 		LoadMapFile("Map2.txt"); // Load Map When Walking Through A Door
 		RedrawMap(); // Redraw the map

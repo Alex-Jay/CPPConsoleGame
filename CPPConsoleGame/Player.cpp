@@ -64,6 +64,11 @@ void Player::decreaseHealth(int damage) // set health
 	cout << " has " << to_string(BattleObject::getHealth()) << " HP remaining!\n";
 	checkIsDead();
 }
+void Player::increaseHealth(int regen) // regenerate health
+{
+	cout << "Has regained " << to_string(regen) << " health!";
+	BattleObject::setHealth(- regen);
+}
 bool Player::checkIsDead()
 {
 	if (getHealth() < 1)
