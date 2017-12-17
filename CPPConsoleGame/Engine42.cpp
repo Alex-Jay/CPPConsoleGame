@@ -498,7 +498,7 @@ bool Engine42::PlayerCollided()
 			{
 				notSpoken = true;
 			}
-			else if ((player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j) || (player.GetCoordinates() == std::make_pair(npc.getXPos() - i, npc.getYPos() - j) && notSpoken)
+			else if ((player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j) || (player.GetCoordinates() == std::make_pair(npc.getXPos() - i, npc.getYPos() - j)) && notSpoken)
 			{
 				GotoXY(0, 28, npc.getDialogueSeg(ns));
 
@@ -508,8 +508,9 @@ bool Engine42::PlayerCollided()
 				{
 					ns = 0;
 				}
-				
+
 			}
+		
 			
 		}
 	return false;
