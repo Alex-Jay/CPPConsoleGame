@@ -100,15 +100,11 @@ void Engine42::InitializeMap(const std::string FILENAME)
 	objectsIntialised = true;
 	//Draw Map Layout
 	DrawMap();
-
-
 }
 
 // Any Update Logic Here
 void Engine42::Update()
 {
-	DetectPlayerCollision();
-
 	// Open Menu On First Boot
 	if (FirstCycle)
 	{
@@ -116,18 +112,17 @@ void Engine42::Update()
 		FirstCycle = false;
 	}
 
+	CheckPlayerAliveState(player); // Check Players Health State
+
+	DetectPlayerCollision(); // Detect Collisions
+
 	//Listen To Input
 	ListenKeyInput();
 
-	// If Debugger is Active, Debug()
+	// If ENABLE_DEBUGGER is TRUE, Debug()
 	if (ENABLE_DEBUGGER)
 	{
 		Debug();
-	}
-	else
-	{
-		GotoXY(0, 25); cout << std::string(Map.at(0).size(), ' ');
-		GotoXY(0, 26); cout << std::string(Map.at(0).size(), ' ');
 	}
 }
 
@@ -150,9 +145,9 @@ void Engine42::Run(Engine42* engine)
 
 	while (IsRunning)
 	{
-		Update();
-		Draw();
-		Sleep(50); // TODO: Add Time System
+		Update(); // Update Logic Every frame	
+		Draw(); // Draw Every Frame
+		Sleep(50); // FPS. TODO: Add Time System
 	}
 }
 
@@ -398,6 +393,46 @@ void Engine42::ListenKeyInput()
 	}
 }
 
+void Engine42::RunDeathScheme()
+{
+	ClearScreen();
+	GotoXY(20, 10); cout << "You Have Died.";
+	Sleep(DISPLAY_TIME);
+	RestartGame();
+}
+
+void Engine42::CheckPlayerAliveState(Player &player)
+{
+	if (player.checkIsDead())
+	{
+		ENABLE_DEBUGGER = false; // Disable Game Loop
+		IsRunning = false; // Disable Debugger if on.
+		RunDeathScheme();
+	}
+}
+
+// Need to fix player Restart
+void Engine42::RestartGame()
+{
+	for (Monster& monster : monsters) // Reset All Monsters m_isDead to FALSE;
+	{
+		monster.setHealth(100);
+		monster.setIsDead(false);
+	}
+
+	Engine42::Map = {};
+
+	LoadMapFile("Map3.txt"); // Reload Map
+
+	RedrawMap(); // Redraw Map
+
+	FirstCycle = true; // Set First Game Cycle to TRUE
+
+	IS_GAME_STARTED = false; // Set bool for Menu
+
+	IsRunning = true; // Run Game
+}
+
 void Engine42::ProcessCharacter(char c, int X, int Y)
 {
 	Point2D drop;
@@ -420,7 +455,6 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 			break;
 
 		case MOB:
-			// Instantiate BattleObject
 
 			// Add Two Drops
 			drops.push_back("Sword of Doom");
