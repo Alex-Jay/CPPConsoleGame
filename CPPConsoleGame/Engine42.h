@@ -36,12 +36,14 @@ public:
 	void InitializeMap(const std::string);
 	void SetConsoleSize(int, int);
 	MapArray GetMap() { return Map; }
+	void RunDeathScheme();
 	void Update();
 	void Run(Engine42*);
 	std::string GetMapName() { return m_MapName; }
 	virtual void Draw();
 	Engine42* GetEnginePtr() { return m_engine; };
 	void DrawMap();
+	void RestartGame();
 	void RedrawMap();
 	void ClearScreen();
 	void MovePlayer(enum Direction, int MovementSpeed = 80);
@@ -55,5 +57,6 @@ public:
 	int GetDistance(pair<int, int> coordOne, pair<int, int> coordTwo);
 	void LoadBattleScreen(Monster &enemy);
 	void ClearCharFromMap(int, int, char);
+	void CheckPlayerAliveState(Player&);
 };
 #endif
