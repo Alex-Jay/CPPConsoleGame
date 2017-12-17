@@ -455,7 +455,7 @@ void Engine42::DetectPlayerCollision()
 	// Monster Collision Detection
 	for (Monster& monster : monsters)
 	{
-		if (player.GetCoordinates() == std::make_pair(monster.getXPos(), monster.getYPos()) && !monster.getIsDead()) // If Player is Stood on a Monster
+		if (GetDistance(player.GetCoordinates(), std::make_pair(monster.getXPos(), monster.getYPos())) == 0 && !monster.getIsDead()) // If Player is Stood on a Monster
 		{
 			LoadBattleScreen(monster);
 		}
@@ -464,7 +464,7 @@ void Engine42::DetectPlayerCollision()
 	// Weapon Pickup Collision Detection
 	for (Weapon& weapon : weapons)
 	{
-		if (player.GetCoordinates() == std::make_pair(weapon.getX(), weapon.getY())) // If Player is Stood on a Weapon
+		if (GetDistance(player.GetCoordinates(), std::make_pair(weapon.getX(), weapon.getY())) == 0) // If Player is Stood on a Weapon
 		{
 			GotoXY(0, 29); weapon.pickedUp(); // Display Pickup Text
 			player.setWeapon(weapon);
