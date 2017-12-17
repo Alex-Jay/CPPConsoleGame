@@ -67,6 +67,13 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 					enemy.setIsDead(true);
 					//engine.ClearCharFromMap(player.getXPos(), player.getYPos(), 'B'); // Remove Monster Char from Where Player is Standing
 					running = false;
+			        GotoXY(0, 26);  std::cout << std::string(100, ' ');
+			        GotoXY(0, 27);  std::cout << std::string(100, ' ');
+			        GotoXY(0, 28);  std::cout << std::string(100, ' ');
+			        GotoXY(0, 29);  std::cout << std::string(100, ' ');
+			        GotoXY(0, 30);  std::cout << std::string(100, ' ');
+			        GotoXY(0, 31);  std::cout << std::string(100, ' ');
+		
 				}
 				//else // If Enemy is Dead
 				//{
@@ -106,17 +113,6 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 			{
 				GotoXY(0, 31);
 				player.decreaseHealth(enemy.Attack(player.getDefence(), player.isDefend()));
-			}
-			else 
-			{
-				enemy.setIsDead(true);
-				running = false;
-				GotoXY(0, 26);  std::cout << std::string(100, ' ');
-				GotoXY(0, 27);  std::cout << std::string(100, ' ');
-				GotoXY(0, 28);  std::cout << std::string(100, ' ');
-				GotoXY(0, 29);  std::cout << std::string(100, ' ');
-				GotoXY(0, 30);  std::cout << std::string(100, ' ');
-				GotoXY(0, 31);  std::cout << std::string(100, ' ');
 			}
 		}
 

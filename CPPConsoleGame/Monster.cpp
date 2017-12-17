@@ -96,6 +96,7 @@ void Monster::setIsDead(bool state)
 bool Monster::getIsDead()
 {
 	return BattleObject::getIsDead();
+	
 }
 
 Monster::~Monster()
