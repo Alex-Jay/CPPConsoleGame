@@ -52,6 +52,7 @@ public:
 	void LoadMapFile(const std::string);
 	void LoadDrawMapFile(const std::string);
 	void DetectPlayerCollision();
+	int GetDistance(pair<int, int> coordOne, pair<int, int> coordTwo);
 	void LoadBattleScreen(Monster &enemy);
 	void ClearCharFromMap(int, int, char);
 };

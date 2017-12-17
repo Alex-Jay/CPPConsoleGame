@@ -2,6 +2,7 @@
 #include "Engine42.h"
 #include "Constants.h"
 #include "GameUtility.h"
+#include "Math.h"
 #include <fstream>
 #include <conio.h>
 #include <iostream>
@@ -476,21 +477,12 @@ void Engine42::DetectPlayerCollision()
 	}
 
 	// NPC Collision Detection
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 2; j++)
-		{
-			if ((player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() + 2)) ||
-				(player.GetCoordinates() == std::make_pair(npc.getXPos() - 2, npc.getYPos() + 2)) ||
-				(player.GetCoordinates() == std::make_pair(npc.getXPos() - 2, npc.getYPos() - 2)) ||
-				(player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() - 2)))
+
+			if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) > 2)
 			{
 				notSpoken = true;
 			}
-			else if (((player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j)) ||
-				(player.GetCoordinates() == std::make_pair(npc.getXPos() - i, npc.getYPos() + j)) || 
-				(player.GetCoordinates() == std::make_pair(npc.getXPos() - i, npc.getYPos() - j)) || 
-				(player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() - j)))
+			else if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) == 1
 				&& notSpoken)
 			{
 				// Display Dialogue
@@ -502,13 +494,11 @@ void Engine42::DetectPlayerCollision()
 
 				ns++;
 				notSpoken = false;
-				if (ns > npc.getDialogue().size())
+				if (ns >= npc.getDialogue().size())
 				{
 					ns = 0;
 				}
 			}
-		}
-	}
 
 	// Door Collision Detection
 	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
@@ -518,6 +508,12 @@ void Engine42::DetectPlayerCollision()
 	}
 }
 
+int Engine42::GetDistance(pair<int, int> coordOne, pair<int, int> coordTwo) /// takes in two points and returns the difference between them
+{
+
+	return sqrt(pow(get<0>(coordOne) - get<0>(coordTwo), 2) + pow(get<1>(coordOne) - get<1>(coordTwo), 2));
+
+}
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;
