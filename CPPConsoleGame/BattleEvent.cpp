@@ -78,7 +78,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 				break;
 
 			case DEFEND: // Defend Case
-				GotoXY(0, 28);
+				GotoXY(0, 30);
 				player.Defend();
 				break;
 

@@ -59,14 +59,14 @@ void Player::setHealth(int damage)
 }
 void Player::decreaseHealth(int damage) // set health
 {
-	cout << " has taken " << to_string(damage) << " damage! ";
+	cout << m_name << " has taken " << to_string(damage) << " damage! ";
 	BattleObject::setHealth(damage);
-	cout << " has " << to_string(BattleObject::getHealth()) << " HP remaining!\n";
+	cout << m_name << " has " << to_string(BattleObject::getHealth()) << " HP remaining!\n";
 	checkIsDead();
 }
 void Player::increaseHealth(int regen) // regenerate health
 {
-	cout << "Has regained " << to_string(regen) << " health!";
+	cout << m_name << "Has regained " << to_string(regen) << " health!";
 	BattleObject::setHealth(- regen);
 }
 bool Player::checkIsDead()
@@ -81,9 +81,13 @@ bool Player::checkIsDead()
 int Player::Attack(int defence)
 {
 	int currentAttack = BattleObject::getAttack() + BattleObject::getWeapon().getAttack(), damage;
-	
+	if (this->isDefend() == false) {
 		damage = (2 * currentAttack) - defence;
-	
+	}
+	else {
+		damage = 2.5*(2 * currentAttack) - defence;
+		this->Defend();
+	}
 	if (damage < 1)
 	{
 		damage = 1;
@@ -94,6 +98,7 @@ int Player::Attack(int defence)
 void Player::Defend()
 {
 	BattleObject::Defend();
+	cout << m_name << " blocks in prepartion for a critical hit";
 }
 void Player::setWeapon(Weapon n)
 {

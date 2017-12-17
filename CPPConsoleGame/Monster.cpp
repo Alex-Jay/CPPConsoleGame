@@ -73,6 +73,7 @@ int Monster::Attack(int defence, bool defend)
 	else
 	{
 		damage = ((2 * currentAttack) - (defence * 3));
+		cout << "Critical Hit!" << endl;
 	}
 	if (damage < 1)
 	{
