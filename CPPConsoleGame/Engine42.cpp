@@ -445,58 +445,6 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 	}
 }
 
-bool Engine42::PlayerCollided()
-{
-	for (auto& monsterCoord : monsters)
-	{
-		if (player.GetCoordinates() == std::make_pair(monsterCoord.getXPos(), monsterCoord.getYPos()) && !monsterCoord.getIsDead())
-		{
-			LoadBattleScreen(monsterCoord);
-			monsterCoord.setIsDead();
-			return true;
-		}
-	}
-	if (player.GetCoordinates() == std::make_pair(DoorCoordinates.X, DoorCoordinates.Y))
-	{
-		//IsRunning = false;
-		LoadMapFile("Map2.txt");
-		return true;
-	}
-	for (int i = 0; i < sizeof(weapons); i++)
-	{
-		if (player.GetCoordinates() == std::make_pair(weapons[i].getX(), weapons[i].getY()))
-		{
-			GotoXY(0, 30); weapons[i].pickedUp();
-			player.setWeapon(weapons[i]);
-			weapons[i].setCoordinates(0,0);
-			return true;
-		}
-	}
-	for (int i = 0; i < 2; i++)
-	{
-		for (int j = 0; j < 2; j++)
-		{
-			if (player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() + 2) || player.GetCoordinates() == std::make_pair(npc.getXPos() - 2, npc.getYPos() - 2))
-			{
-				notSpoken = true;
-			}
-			else if ((player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j) || (player.GetCoordinates() == std::make_pair(npc.getXPos() - i, npc.getYPos() - j)) && notSpoken)
-			{
-				GotoXY(0, 28, npc.getDialogueSeg(ns));
-
-				ns++;
-				notSpoken = false;
-				if (ns > npc.getDialogue().size())
-				{
-					ns = 0;
-				}
-
-			}
-		
-			
-		}
-	return false;
-}
 
 void Engine42::DetectPlayerCollision()
 {
@@ -541,13 +489,20 @@ void Engine42::DetectPlayerCollision()
 	{
 		for (int j = 0; j < 2; j++)
 		{
-			if (player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() + 2))
+			if ((player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() + 2)) ||
+				(player.GetCoordinates() == std::make_pair(npc.getXPos() - 2, npc.getYPos() + 2)) ||
+				(player.GetCoordinates() == std::make_pair(npc.getXPos() - 2, npc.getYPos() - 2)) ||
+				(player.GetCoordinates() == std::make_pair(npc.getXPos() + 2, npc.getYPos() - 2)))
 			{
 				notSpoken = true;
 			}
-			else if (player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j) && notSpoken)
+			else if (((player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() + j)) ||
+				(player.GetCoordinates() == std::make_pair(npc.getXPos() - i, npc.getYPos() + j)) || 
+				(player.GetCoordinates() == std::make_pair(npc.getXPos() - i, npc.getYPos() - j)) || 
+				(player.GetCoordinates() == std::make_pair(npc.getXPos() + i, npc.getYPos() - j)))
+				&& notSpoken)
 			{
-				GotoXY(0,26);
+				GotoXY(0,28);
 				cout << npc.getDialogueSeg(ns)<< endl;
 				ns++;
 				notSpoken = false;
