@@ -51,7 +51,6 @@ void Monster::decreaseHealth(int damage) // set health
 {
 	cout  << m_name << " has taken " << to_string(damage) << " damage! ";
 	BattleObject::setHealth(damage);
-	cout << m_name << " has " << to_string(BattleObject::getHealth()) << " HP remaining!\n";
 	checkIsDead();
 }
 bool Monster::checkIsDead()

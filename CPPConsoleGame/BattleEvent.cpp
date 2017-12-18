@@ -20,22 +20,37 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 	bool running = true;
 	bool eDead = false;
 	int count = 0;
-	GotoXY(10, 26); cout << "Battle";
-	GotoXY(18, 26); cout << "->";
+	GotoXY(31, 24); cout << "Battle";
+	GotoXY(28, 26); cout << "->";
 
 	while (running)
 	{
-		GotoXY(20, 26);  cout << "1) Attack!";
-		GotoXY(20, 27);  cout << "2) Defend!";
-		GotoXY(20, 28);  cout << "3) Run!";
+		GotoXY(23, 5); cout << "Health: " << "    ";
+		GotoXY(26, 13); cout << "Health: " << "    ";
+
+		// Display Monster Info
+		GotoXY(23, 4); cout << "Name: " << enemy.getName();
+		GotoXY(23, 5); cout << "Health: " << enemy.getHealth();
+		GotoXY(23, 6); cout << "Strength: " << enemy.getAttack();
+		GotoXY(23, 7); cout << "Armor: " << enemy.getDefence();
+
+		// Display Player Info
+		GotoXY(26, 12); cout << "Name: " << player.getName();
+		GotoXY(26, 13); cout << "Health: " << player.getHealth();
+		GotoXY(26, 14); cout << "Strength: " << player.getAttack();
+		GotoXY(26, 15); cout << "Armor: " << player.getDefence();
+
+		GotoXY(30, 26);  cout << " Attack!";
+		GotoXY(30, 27);  cout << " Defend!";
+		GotoXY(30, 28);  cout << " Run!";
 		
 		system("pause>nul"); // the >nul bit causes it the print no message
 
 		if (GetAsyncKeyState(VK_DOWN) && x != 28) //down button pressed
 		{
-			GotoXY(18, x); cout << "  ";
+			GotoXY(28, x); cout << "  ";
 			x++;
-			GotoXY(18, x); cout << "->";
+			GotoXY(28, x); cout << "->";
 			menu_item++;
 			continue;
 
@@ -43,9 +58,9 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 
 		if (GetAsyncKeyState(VK_UP) && x != 26) //up button pressed
 		{
-			GotoXY(18, x); cout << "  ";
+			GotoXY(28, x); cout << "  ";
 			x--;
-			GotoXY(18, x); cout << "->";
+			GotoXY(28, x); cout << "->";
 			menu_item--;
 			continue;
 		}
@@ -56,21 +71,16 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 			{
 			case ATTACK: // Attack Case
 				GotoXY(0, 30);  std::cout << std::string(100, ' ');
-				GotoXY(0, 30);
 
 				if(enemy.getHealth() > 0)
 				{
-					enemy.decreaseHealth(player.Attack(enemy.getDefence()));
-				}
-				
-				//else // If Enemy is Dead
-				//{
-				//	player.setCoordinates(tempEnemyXPos, tempEnemyYPos - 2); // Move The Player Away From The Enemy [ Win Condition ]
-				//	enemy.setIsDead(true);
-				//	engine.GetMap().at(player.getYPos()).at(player.getXPos()) = ' ';
+					GotoXY(23, 5); cout << "Health: " << enemy.getHealth() << " - " << player.Attack(enemy.getDefence());
+					Sleep(1000);
+					GotoXY(0, 25); enemy.decreaseHealth(player.Attack(enemy.getDefence())); // Player Attack Monster
+					GotoXY(23, 5); cout << "                           ";
+					GotoXY(23, 5); cout << "Health: " << enemy.getHealth();
 
-				//	running = false;
-				//}
+				}
 				break;
 
 			case DEFEND: // Defend Case
@@ -87,8 +97,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 
 				Sleep(DISPLAY_TIME);
 
-				GotoXY(0, 32);
-				cout << std::string(8, ' ');
+				GotoXY(0, 32); cout << std::string(100, ' ');
 
 				player.setCoordinates(tempEnemyXPos, tempEnemyYPos - 2); // Move The Player Away From The Enemy [ Run Condition ]
 
@@ -97,30 +106,26 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 				break;
 			}
 
-				GotoXY(0, 31);
-				player.decreaseHealth(enemy.Attack(player.getDefence(), player.isDefend()));
-				if (player.getHealth() < 1)
+				GotoXY(26, 13); cout << "Health: " << player.getHealth() << " - " << enemy.Attack(player.getDefence(), player.isDefend());
+				Sleep(1000);
+				GotoXY(0, 26); player.decreaseHealth(enemy.Attack(player.getDefence(), player.isDefend())); // Monster Attack Player
+				GotoXY(26, 13); cout << "                 ";
+				GotoXY(26, 13);; cout << "Health: " << player.getHealth();
+
+				if (player.getIsDead())
 				{
 					running = false;
+					engine.RunDeathScheme();
 				}
+
 				if(enemy.getHealth() < 1)
 				{
 					enemy.setIsDead(true);
-					//engine.ClearCharFromMap(player.getXPos(), player.getYPos(), 'B'); // Remove Monster Char from Where Player is Standing
+					engine.ClearCharFromMap(enemy.getXPos(), enemy.getYPos(), FLOOR); // Remove Monster Char from Where Player is Standing
 					running = false;
-					GotoXY(0, 26);  std::cout << std::string(100, ' ');
-					GotoXY(0, 27);  std::cout << std::string(100, ' ');
-					GotoXY(0, 28);  std::cout << std::string(100, ' ');
-					GotoXY(0, 29);  std::cout << std::string(100, ' ');
-					GotoXY(0, 30);  std::cout << std::string(100, ' ');
-					GotoXY(0, 31);  std::cout << std::string(100, ' ');
-
 				}
-			
-
 		}
 
-		GotoXY(20, 23);
-
+		//GotoXY(20, 23);
 	}
 }

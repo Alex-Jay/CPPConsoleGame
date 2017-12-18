@@ -3,9 +3,6 @@
 // Milliseconds in a Second
 const int SECOND_IN_MILLISECONDS = 1000;
 
-// Health Bar
-const char HEALTH_BAR_CHAR = '=';
-
 // Menu Enums
 const enum BattleState { ATTACK = 0, DEFEND = 1, RUN = 2};
 
@@ -17,7 +14,7 @@ const int DIALOGUE_SPEED_DELAY = (int)(0.05 * SECOND_IN_MILLISECONDS); // Cast F
 
 // Display Delay
 const int MENU_HEIGHT = 8;
-const int DISPLAY_TIME = 2 * SECOND_IN_MILLISECONDS;
+const int DISPLAY_TIME = 3 * SECOND_IN_MILLISECONDS;
 
 // Console Varialbes
 const int CONSOLE_SIZE[] = { 500, 625 };

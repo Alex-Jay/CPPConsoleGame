@@ -41,6 +41,7 @@ NPC npc;
 std::vector<std::string> dialogue;
 bool notSpoken = true;
 int ns = 0;
+Weapon villagerDrop = Weapon("Shiny Dagger", 5, 2); // NPC Gives weapon
 
 // Monster Values
 std::vector<Monster> monsters;
@@ -83,14 +84,15 @@ void Engine42::InitializeMap(const std::string FILENAME)
 {
 
 	//Initialize weapons
-	Weapon sword = Weapon("Sword of Doom", 10, 0);
-	weapons[0] = sword;
-	Weapon spork = Weapon("Golden Spork", 3, 6);
-	weapons[1] = spork;
+	weapons[0] = Weapon("Sword of Doom", 10, 0);
+	weapons[1] = Weapon("Golden Spork", 3, 6);
 
 	//Initialize Dialogue
 	dialogue.push_back("Hello " + PlayerName + ", Welcome To Kai, City Of Skies.");
-	dialogue.push_back("Go on then, Go Explore!");
+	dialogue.push_back("To Move Use Arrow Keys,");
+	dialogue.push_back("Collect / Attack / Use by Standing over a Letter.");
+	dialogue.push_back("You seem like a decent chap, Here, take this sword.");
+	dialogue.push_back("Be safe out there, Don't trust everyone.");
 
 	// Set Console Size
 	SetConsoleSize(CONSOLE_SIZE[0], CONSOLE_SIZE[1]);
@@ -112,12 +114,10 @@ void Engine42::Update()
 		FirstCycle = false;
 	}
 
-	CheckPlayerAliveState(player); // Check Players Health State
-
-	DetectPlayerCollision(); // Detect Collisions
-
 	//Listen To Input
 	ListenKeyInput();
+
+	DetectPlayerCollision(); // Detect Collisions
 
 	// If ENABLE_DEBUGGER is TRUE, Debug()
 	if (ENABLE_DEBUGGER)
@@ -166,9 +166,9 @@ void Engine42::DrawMap()
 	{
 		system("CLS");
 
-		for (auto YPos : Map)
+		for (auto& YPos : Map)
 		{
-			for (auto XPos : YPos)
+			for (auto& XPos : YPos)
 			{
 				std::cout << XPos;
 			}
@@ -199,7 +199,7 @@ void Engine42::RedrawMap()
 
 void Engine42::MovePlayer(enum Direction DIRECTION, int MovementSpeed)
 {
-	int PlayerX = player.getXPos(), PlayerY = player.getYPos(); // Retrieve and Copy Player Position Values.
+	int PlayerX = player.GetCoordinates().first, PlayerY = player.GetCoordinates().second; // Retrieve and Copy Player Position Values.
 
 	switch (DIRECTION)
 	{
@@ -263,7 +263,6 @@ void Engine42::OpenMenu()
 		{ GotoXY(30, 27);  std::cout << " Start Game"; }
 		else { GotoXY(30, 27);  std::cout << " Continue"; }
 
-
 		GotoXY(30, 28);  std::cout << " Controls";
 
 		if (ENABLE_DEBUGGER){ GotoXY(30, 29);  std::cout << " Debug: ON"; }
@@ -299,7 +298,7 @@ void Engine42::OpenMenu()
 				case 0:
 					ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 
-					RedrawMap();
+					DrawMap();
 
 					IS_GAME_STARTED = true;
 					MenuTriggered = false; // Disable Menu & Start/Continue Game
@@ -357,10 +356,16 @@ void Engine42::Debug()
 	GotoXY(0, 29); std::cout << " Attack: " << player.getWeapon().getAttack();
 	GotoXY(0, 30); std::cout << " Defense: " << player.getWeapon().getDefence();
 	GotoXY(0, 31); std::cout << "==========================";
+
+	//GotoXY(0, 25); std::cout << "Weapon 1 X,Y : " << weapons[0].getX() << ", " << weapons[0].getY();
+	//GotoXY(0, 26); std::cout << "Weapon 2 X,Y : " << weapons[1].getX() << ", " << weapons[1].getY();
+
 	//GotoXY(0, 25); std::cout << "Health: " << player.getHealth() << "\tArmor: " << player.getDefence() << "\tWeapon: " << player.getWeapon().getName() << "\tAttack: " << player.getWeapon().getAttack() << "\tDefense: " << player.getWeapon().getDefence();
 
-	//GotoXY(0, 25); std::cout << "Player X: " << player.getXPos() << "\tPlayer Y: " << player.getYPos();
+	//GotoXY(0, 27); std::cout << "Player X: " << player.getXPos() << "\tPlayer Y: " << player.getYPos();
 	//GotoXY(0, 26); std::cout << "NPC X: " << player.getBattleOb().toString() << "\tNPC Y: " << npc.getYPos();
+
+	//GotoXY(0, 28); std::cout << "Current Tile: " << Map.at(player.getYPos()).at(player.getXPos());
 
 	//GotoXY(0, 26); std::cout << "NPC X: " << npc.getXPos() << "\tNPC Y: " << npc.getYPos();
 
@@ -395,35 +400,27 @@ void Engine42::ListenKeyInput()
 
 void Engine42::RunDeathScheme()
 {
-	ClearScreen();
-	GotoXY(20, 10); cout << "You Have Died.";
+	ENABLE_DEBUGGER = false; // Disable Debugger
+	IsRunning = false; // Disable Game State
+
+	ClearScreen(); // Clear Draw Screen
+	ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Ckear Menu
+
+	GotoXY(20, 10); DisplayDialogue("You Have Died.");
 	Sleep(DISPLAY_TIME);
-	IsRunning = false;
-	//RestartGame();
+
+	RestartGame();
 }
 
-void Engine42::CheckPlayerAliveState(Player &player)
-{
-	if (player.checkIsDead())
-	{
-		ENABLE_DEBUGGER = false; // Disable Game Loop
-		IsRunning = false; // Disable Debugger if on.
-		RunDeathScheme();
-	}
-}
-
-// Need to fix player Restart
 void Engine42::RestartGame()
 {
-	for (Monster& monster : monsters) // Reset All Monsters m_isDead to FALSE;
-	{
-		monster.setHealth(100);
-		monster.setIsDead(false);
-	}
+	weaponNum = 0; // Reset Weapon Count
 
-	Engine42::Map = {};
+	MobStartAttack = 2; // Reset Mob Start Attack
 
-	LoadMapFile("Map3.txt"); // Reload Map
+	monsters.clear(); // Clear Monsters for New Game
+
+	InitializeMap("Map3.txt"); // Re-Initialize Map
 
 	RedrawMap(); // Redraw Map
 
@@ -444,9 +441,9 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 		{
 
 		case PLAYER:
-			//playerStatsObj = BattleObject(PLAYER_START_HEALTH, PlayerName, PLAYER_START_ATTACK, PLAYER_START_DEFENSE); // Create BattleObject / Player Stats for battles
-
+			// Instantiate Player Object with BattleObject stats
 			player = Player(std::make_pair(X, Y), PlayerName, PLAYER_START_HEALTH, PLAYER_START_ATTACK, PLAYER_START_DEFENSE);
+			player.setIsDead(false);
 			player.setCoordinates(X, Y);
 			break;
 
@@ -456,7 +453,6 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 			break;
 
 		case MOB:
-
 			// Add Two Drops
 			drops.push_back("Sword of Doom");
 			drops.push_back("Golden Spork");
@@ -471,8 +467,8 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 			DoorCoordinates.Y = Y;
 			break;
 
-		case DROP:
-			// Save All Drop Locations
+		case WEAPON:
+			// Save All Weapon Location
 			weapons[weaponNum].setCoordinates(X, Y);
 			weaponNum++;
 			break;
@@ -502,22 +498,33 @@ void Engine42::DetectPlayerCollision()
 	{
 		if (GetDistance(player.GetCoordinates(), std::make_pair(weapon.getX(), weapon.getY())) == 0) // If Player is Stood on a Weapon
 		{
+			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS);
+
 			GotoXY(0, 29); weapon.pickedUp(); // Display Pickup Text
-			player.setWeapon(weapon);
-			weapon.setCoordinates(0, 0);
+			player.setWeapon(weapon); // Set Players Current Weapon
+
+			ClearCharFromMap(player.getXPos(), player.getYPos(), FLOOR); // Remove Weapon from MapArray
+
+			weapon.setCoordinates(0, 0); // Move Weapon Collision to 0,0 [ Unreachable ]
 
 			Sleep(DISPLAY_TIME); // Display Pickup for DISPLAY_TIME seconds
 
 			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 		}
 	}
+
 	// Potion Pickup Collision Detection
 	for (Potion& potion : potionList)
 	{
 		if (GetDistance(player.GetCoordinates(), std::make_pair(potion.getXPos(), potion.getYPos())) == 0) // If Player is Stood on a Weapon
 		{
+			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS);
+
 			GotoXY(0, 29); potion.pickedUp(); // Display Pickup Text
 			player.increaseHealth(potion.getHealth());
+
+			ClearCharFromMap(potion.getXPos(), potion.getYPos(), FLOOR); // Clear Potion from Map Array on after pickup
+
 			potion.setCoordinates(0, 0);
 
 			Sleep(DISPLAY_TIME); // Display Pickup for DISPLAY_TIME seconds
@@ -525,29 +532,47 @@ void Engine42::DetectPlayerCollision()
 			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 		}
 	}
+
 	// NPC Collision Detection
+	//if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) > 2)
+	//{
+	//	notSpoken = true;
+	//}
+	//else if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) == 1
+	//			&& notSpoken)
+	//{
+	//	// Display Dialogue
+	//	GotoXY(0,28); DisplayDialogue(npc.getDialogueSeg(ns));
 
-			if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) > 2)
-			{
-				notSpoken = true;
-			}
-			else if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) == 1
-				&& notSpoken)
-			{
-				// Display Dialogue
-				GotoXY(0,28);
-				//cout << npc.getDialogueSeg(ns)<< endl;
-				DisplayDialogue(npc.getDialogueSeg(ns));
-				Sleep(DISPLAY_TIME); // Display Dialogue for DISPLAY_TIME seconds
-				ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
+	//	Sleep(DISPLAY_TIME); // Display Dialogue for DISPLAY_TIME seconds
+	//	ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 
-				ns++;
-				notSpoken = false;
-				if (ns >= npc.getDialogue().size())
-				{
-					ns = 0;
-				}
+	//	ns++;
+	//	notSpoken = false;
+	//	if (ns >= npc.getDialogue().size())
+	//	{
+	//		ns = 0;
+	//	}
+	//}
+
+	if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) == 1)
+	{
+		if (ns < npc.getDialogue().size())
+		{
+			GotoXY(0, 28); DisplayDialogue(npc.getDialogueSeg(ns));
+			Sleep(1000); // Display Dialogue for DISPLAY_TIME seconds
+			if (ns == 3)
+			{
+				ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS);
+				player.setWeapon(villagerDrop);
+				GotoXY(0, 28); villagerDrop.pickedUp();
+				Sleep(2000); // Display Dialogue for DISPLAY_TIME seconds
+				ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS);
 			}
+			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
+			ns++;
+		}
+	}
 
 	// Door Collision Detection
 	if (GetDistance(player.GetCoordinates(), std::make_pair(DoorCoordinates.X, DoorCoordinates.Y)) == 0)
@@ -563,6 +588,7 @@ int Engine42::GetDistance(pair<int, int> coordOne, pair<int, int> coordTwo) /// 
 	return sqrt(pow(get<0>(coordOne) - get<0>(coordTwo), 2) + pow(get<1>(coordOne) - get<1>(coordTwo), 2));
 
 }
+
 void Engine42::LoadMapFile(const std::string FILENAME)
 {
 	int X = 0, Y = 0;
@@ -642,5 +668,7 @@ void Engine42::LoadDrawMapFile(const std::string FILENAME)
 
 void Engine42::ClearCharFromMap(int X, int Y, char replaceWith)
 {
-	Map.at(X).at(Y) = replaceWith;
+	MapArray* currentMap = GetMap();
+	//this->Map.at(X).at(Y) = replaceWith;
+	(*currentMap).at(Y).at(X) = replaceWith;
 }

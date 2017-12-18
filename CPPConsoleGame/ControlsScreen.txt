@@ -1,17 +1,13 @@
 ﻿XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X                                                                        X
 X       Main Menu                                       Use              X
-X                                                                        X
-X     =============                             ====================     X
-X     | __ __  __ |                             |                  |     X
-X     ||_ |__ |   |            Move Up          |    Enter         |     X
-X     ||__ __||__ |                             |    <---          |     X
-X     |           |         =============       |                  |     X
-X     =============         |     ^     |       ====================     X
-X                           |   / | \   |                                X
-X                           |  /  |  \  |                                X
-X                           |     |     |                                X
-X                           =============                                X
+X                              Move Up                                   X
+X     =============         =============       ====================     X
+X     | __ __  __ |         |     ^     |       |                  |     X
+X     ||_ |__ |   |         |   / | \   |       |    Enter         |     X
+X     ||__ __||__ |         |  /  |  \  |       |    <---          |     X
+X     |           |         |     |     |       |                  |     X
+X     =============         =============       ====================     X
 X            =============  =============  =============                 X
 X            |    /      |  |     |     |  |      \    |                 X
 X            |   /___    |  |  \  |  /  |  |   ____\   |                 X
@@ -20,5 +16,9 @@ X            |    \      |  |     V     |  |      /    |                 X
 X            =============  =============  =============                 X
 X                                                                        X
 X                             Move Down                                  X
+X                                                                        X
+X ---------------------------- Map Legend ------------------------------ X
+X    P = Player               M = Monster              * = Weapon        X
+X    V = NPC/Villager         ^ = Potion               " = Door          X
 X                                                                        X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

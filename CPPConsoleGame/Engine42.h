@@ -9,7 +9,7 @@
 typedef std::vector<std::vector<char>> MapArray; // Define 2D Vector Array as 'MapArray' for Ease-of-Use
 
 // Reference Enums
-const enum GameObjects { PLAYER = 'P', VILLAGER = 'V', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', DROP = '*', FLOOR = ' ', WALL = 'X' };
+const enum GameObjects { PLAYER = 'P', VILLAGER = 'V', MOB = 'M', SEWER = 'O', DOOR = '"', COLLECTIBLE = '^', WEAPON = '*', FLOOR = ' ', WALL = 'X' };
 const enum Direction { LEFT, RIGHT, UP, DOWN };
 
 struct Point2D
@@ -35,7 +35,7 @@ public:
 	int GetID() { return m_id; }
 	void InitializeMap(const std::string);
 	void SetConsoleSize(int, int);
-	MapArray GetMap() { return Map; }
+	MapArray* GetMap() { return &Map; }
 	void RunDeathScheme();
 	void Update();
 	void Run(Engine42*);
@@ -57,6 +57,5 @@ public:
 	int GetDistance(pair<int, int> coordOne, pair<int, int> coordTwo);
 	void LoadBattleScreen(Monster &enemy);
 	void ClearCharFromMap(int, int, char);
-	void CheckPlayerAliveState(Player&);
 };
 #endif

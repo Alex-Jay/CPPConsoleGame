@@ -32,7 +32,6 @@ public:
 	int Attack(int defence);
 	void Defend();
 	void setWeapon(Weapon n);
-	bool checkIsDead();
 	bool getIsDead();
 	void setIsDead(bool);
 	void setHealth(int health);
