@@ -62,19 +62,7 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 				{
 					enemy.decreaseHealth(player.Attack(enemy.getDefence()));
 				}
-				else
-				{
-					enemy.setIsDead(true);
-					//engine.ClearCharFromMap(player.getXPos(), player.getYPos(), 'B'); // Remove Monster Char from Where Player is Standing
-					running = false;
-			        GotoXY(0, 26);  std::cout << std::string(100, ' ');
-			        GotoXY(0, 27);  std::cout << std::string(100, ' ');
-			        GotoXY(0, 28);  std::cout << std::string(100, ' ');
-			        GotoXY(0, 29);  std::cout << std::string(100, ' ');
-			        GotoXY(0, 30);  std::cout << std::string(100, ' ');
-			        GotoXY(0, 31);  std::cout << std::string(100, ' ');
-		
-				}
+				
 				//else // If Enemy is Dead
 				//{
 				//	player.setCoordinates(tempEnemyXPos, tempEnemyYPos - 2); // Move The Player Away From The Enemy [ Win Condition ]
@@ -114,6 +102,19 @@ void BattleEvent::EventLoop(Player &player, Monster &enemy, Engine42 &engine)
 				if (player.getHealth() < 1)
 				{
 					running = false;
+				}
+				if(enemy.getHealth() < 1)
+				{
+					enemy.setIsDead(true);
+					//engine.ClearCharFromMap(player.getXPos(), player.getYPos(), 'B'); // Remove Monster Char from Where Player is Standing
+					running = false;
+					GotoXY(0, 26);  std::cout << std::string(100, ' ');
+					GotoXY(0, 27);  std::cout << std::string(100, ' ');
+					GotoXY(0, 28);  std::cout << std::string(100, ' ');
+					GotoXY(0, 29);  std::cout << std::string(100, ' ');
+					GotoXY(0, 30);  std::cout << std::string(100, ' ');
+					GotoXY(0, 31);  std::cout << std::string(100, ' ');
+
 				}
 			
 
