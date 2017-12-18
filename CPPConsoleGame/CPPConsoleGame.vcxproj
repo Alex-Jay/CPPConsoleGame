@@ -183,6 +183,7 @@
   <ItemGroup>
     <Text Include="BattleScreen.txt" />
     <Text Include="ControlsScreen.txt" />
+    <Text Include="Logo.txt" />
     <Text Include="Map1.txt" />
     <Text Include="Map2.txt" />
     <Text Include="Map3.txt" />

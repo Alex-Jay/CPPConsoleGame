@@ -115,5 +115,8 @@
     <Text Include="BattleScreen.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="Logo.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

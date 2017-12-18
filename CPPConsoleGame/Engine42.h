@@ -57,5 +57,6 @@ public:
 	int GetDistance(pair<int, int> coordOne, pair<int, int> coordTwo);
 	void LoadBattleScreen(Monster &enemy);
 	void ClearCharFromMap(int, int, char);
+	void RemoveStartWalls();
 };
 #endif

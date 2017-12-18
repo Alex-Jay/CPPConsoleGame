@@ -35,6 +35,7 @@ bool FirstCycle = true;
 Player player;
 BattleObject playerStatsObj;
 std::string PlayerName = "Player";
+bool SpokenToVillager = false;
 
 // NPC Values
 NPC npc;
@@ -92,7 +93,7 @@ void Engine42::InitializeMap(const std::string FILENAME)
 	dialogue.push_back("To Move Use Arrow Keys,");
 	dialogue.push_back("Collect / Attack / Use by Standing over a Letter.");
 	dialogue.push_back("You seem like a decent chap, Here, take this sword.");
-	dialogue.push_back("Be safe out there, Don't trust everyone.");
+	dialogue.push_back("Be safe out there, Don't trust anyone.");
 
 	// Set Console Size
 	SetConsoleSize(CONSOLE_SIZE[0], CONSOLE_SIZE[1]);
@@ -100,8 +101,6 @@ void Engine42::InitializeMap(const std::string FILENAME)
 	// Load The Map
 	LoadMapFile(FILENAME);
 	objectsIntialised = true;
-	//Draw Map Layout
-	DrawMap();
 }
 
 // Any Update Logic Here
@@ -138,6 +137,8 @@ void Engine42::Run(Engine42* engine)
 	// Initialize Starting Map
 	InitializeMap("Map3.txt");
 
+	LoadDrawMapFile("Logo.txt");
+
 	if (MapLoaded)
 	{
 		IsRunning = true;
@@ -156,6 +157,11 @@ void Engine42::Draw()
 {
 	//Draw Player Position
 	GotoXY(player.getXPos(), player.getYPos(), "P");
+
+	if (!SpokenToVillager)
+	{
+		GotoXY(55, 16); cout << "< Speak";
+	}
 }
 
 void Engine42::DrawMap()
@@ -557,6 +563,13 @@ void Engine42::DetectPlayerCollision()
 
 	if (GetDistance(player.GetCoordinates(), std::make_pair(npc.getXPos(), npc.getYPos())) == 1)
 	{
+		ENABLE_DEBUGGER = false;
+
+		SpokenToVillager = true;
+		GotoXY(55, 16); cout << "         ";
+
+		ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS);
+
 		if (ns < npc.getDialogue().size())
 		{
 			GotoXY(0, 28); DisplayDialogue(npc.getDialogueSeg(ns));
@@ -568,6 +581,10 @@ void Engine42::DetectPlayerCollision()
 				GotoXY(0, 28); villagerDrop.pickedUp();
 				Sleep(2000); // Display Dialogue for DISPLAY_TIME seconds
 				ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS);
+			}
+			if (ns == 4)
+			{
+				RemoveStartWalls();
 			}
 			ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS); // Clear Menu -> Map Height, Length to Clear
 			ns++;
@@ -671,4 +688,14 @@ void Engine42::ClearCharFromMap(int X, int Y, char replaceWith)
 	MapArray* currentMap = GetMap();
 	//this->Map.at(X).at(Y) = replaceWith;
 	(*currentMap).at(Y).at(X) = replaceWith;
+}
+
+void Engine42::RemoveStartWalls()
+{
+	for (int i = 1; i < 9; i++)
+	{
+		ClearCharFromMap(37, i, FLOOR);
+		Sleep(500);
+		DrawMap();
+	}
 }
