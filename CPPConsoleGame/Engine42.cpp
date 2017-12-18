@@ -93,6 +93,7 @@ void Engine42::InitializeMap(const std::string FILENAME)
 	dialogue.push_back("To Move Use Arrow Keys,");
 	dialogue.push_back("Collect / Attack / Use by Standing over a Letter.");
 	dialogue.push_back("You seem like a decent chap, Here, take this sword.");
+	dialogue.push_back("Press ESC > Controls to See Controls Again.");
 	dialogue.push_back("Be safe out there, Don't trust anyone.");
 
 	// Set Console Size
@@ -584,7 +585,7 @@ void Engine42::DetectPlayerCollision()
 				Sleep(2000); // Display Dialogue for DISPLAY_TIME seconds
 				ClearMenu(Map.size(), CONSOLE_WIDTH_IN_CHARS);
 			}
-			if (ns == 4)
+			if (ns == 5)
 			{
 				RemoveStartWalls();
 			}
