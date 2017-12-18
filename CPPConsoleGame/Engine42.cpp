@@ -428,13 +428,13 @@ void Engine42::RestartGame()
 
 	InitializeMap("Map3.txt"); // Re-Initialize Map
 
-	RedrawMap(); // Redraw Map
-
 	FirstCycle = true; // Set First Game Cycle to TRUE
 
 	IS_GAME_STARTED = false; // Set bool for Menu
 
 	IsRunning = true; // Run Game
+
+	LoadDrawMapFile("Logo.txt");
 }
 
 void Engine42::ProcessCharacter(char c, int X, int Y)
@@ -695,7 +695,7 @@ void Engine42::RemoveStartWalls()
 	for (int i = 1; i < 9; i++)
 	{
 		ClearCharFromMap(37, i, FLOOR);
-		Sleep(500);
+		Sleep(200);
 		DrawMap();
 	}
 }

@@ -1,6 +1,6 @@
 ﻿XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X                                                                        X
-X       Main Menu                                       Use              X
+X       Main Menu                                      Select            X
 X                              Move Up                                   X
 X     =============         =============       ====================     X
 X     | __ __  __ |         |     ^     |       |                  |     X

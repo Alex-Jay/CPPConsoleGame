@@ -10,11 +10,11 @@ const enum BattleState { ATTACK = 0, DEFEND = 1, RUN = 2};
 //const enum Type { MONSTER, NPC, COLLECTIBLE, WEAPON };
 
 // Dialogue Delay
-const int DIALOGUE_SPEED_DELAY = (int)(0.05 * SECOND_IN_MILLISECONDS); // Cast Float to Int
+const int DIALOGUE_SPEED_DELAY = (int)(0.04 * SECOND_IN_MILLISECONDS); // Cast Float to Int
 
 // Display Delay
 const int MENU_HEIGHT = 8;
-const int DISPLAY_TIME = 3 * SECOND_IN_MILLISECONDS;
+const int DISPLAY_TIME = (int)(2.5 * SECOND_IN_MILLISECONDS);
 
 // Console Varialbes
 const int CONSOLE_SIZE[] = { 500, 625 };
