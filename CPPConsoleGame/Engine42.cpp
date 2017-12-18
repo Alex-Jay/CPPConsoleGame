@@ -462,7 +462,7 @@ void Engine42::ProcessCharacter(char c, int X, int Y)
 			// Add Two Drops
 			drops.push_back("Sword of Doom");
 			drops.push_back("Golden Spork");
-			MobStartAttack += 7;
+			MobStartAttack += 1;
 			// Instansiate Monster Object with X & Y Positions
 			monsters.push_back(Monster(std::make_pair(X, Y), "Monster", drops, MOB_START_HEALTH, MobStartAttack , MOB_START_DEFENSE));
 			break;
