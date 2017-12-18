@@ -21,7 +21,7 @@ const int CONSOLE_SIZE[] = { 500, 625 };
 const int CONSOLE_WIDTH_IN_CHARS = 100;
 
 // Player Stats
-const int PLAYER_START_HEALTH = 100;
+const int PLAYER_START_HEALTH = 5;
 const int PLAYER_START_ATTACK = 5;
 const int PLAYER_START_DEFENSE = 4;
 

@@ -432,6 +432,8 @@ void Engine42::RestartGame()
 
 	IS_GAME_STARTED = false; // Set bool for Menu
 
+	SpokenToVillager = false; // Restart Start NPC Arrow
+
 	IsRunning = true; // Run Game
 
 	LoadDrawMapFile("Logo.txt");
